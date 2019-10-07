@@ -41,6 +41,34 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
     }
 
     /**
+     * @param I $invoice
+     */
+    public function update(I $invoice): void
+    {
+        em::_table(I::TABLE)
+            ->update(
+                [
+                    I::FIELD_INVOICE_NUM            => $invoice->getInvoiceNumber(),
+                    I::FIELD_DATE                   => $invoice->getDate(),
+                    I::FIELD_DUE_DATE               => $invoice->getDueDate(),
+                    I::FIELD_DATE_PAID              => $invoice->getDatePaid(),
+                    I::FIELD_LAST_CAPTURE_ATTEMPT   => $invoice->getLastCaptureAttempt(),
+                    I::FIELD_SUB_TOTAL              => $invoice->getSubTotal(),
+                    I::FIELD_CREDIT                 => $invoice->getCredit(),
+                    I::FIELD_TAX_1                  => $invoice->getTax(),
+                    I::FIELD_TAX_2                  => $invoice->getTax2(),
+                    I::FIELD_TOTAL                  => $invoice->getTotal(),
+                    I::FIELD_TAX_RATE_1             => $invoice->getTaxRate(),
+                    I::FIELD_TAX_RATE_2             => $invoice->getTaxRate2(),
+                    I::FIELD_STATUS                 => $invoice->getStatus(),
+                    I::FIELD_PAYMENT_METHOD         => $invoice->getPaymentMethod(),
+                    I::FIELD_PAYMENT_METHOD_ID      => $invoice->getPaymentMethodId(),
+                    I::FIELD_NOTES                  => $invoice->getNotes(),
+                ]
+            );
+    }
+
+    /**
      * @param array $results
      *
      * @throws Exception

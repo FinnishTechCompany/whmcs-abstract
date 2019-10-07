@@ -23,4 +23,9 @@ interface InvoiceRepositoryInterface
      * @return Invoice
      */
     public function getOneById(int $id): Invoice;
+
+    /**
+     * @param Invoice $invoice
+     */
+    public function update(Invoice $invoice): void;
 }
