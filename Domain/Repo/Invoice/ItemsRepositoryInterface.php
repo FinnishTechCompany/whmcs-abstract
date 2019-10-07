@@ -28,4 +28,9 @@ interface ItemsRepositoryInterface
      * @param Invoice\Items $item
      */
     public function store(Invoice\Items $item): void;
+
+    /**
+     * @param int $getId
+     */
+    public function drop(int $getId): void;
 }

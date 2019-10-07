@@ -46,6 +46,7 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
     public function update(I $invoice): void
     {
         em::_table(I::TABLE)
+            ->where(I::FIELD_ID, '=', $invoice->getId())
             ->update(
                 [
                     I::FIELD_INVOICE_NUM            => $invoice->getInvoiceNumber(),

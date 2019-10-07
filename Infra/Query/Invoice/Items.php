@@ -52,6 +52,11 @@ final class Items extends AbstractQuery implements ItemsRepositoryInterface
         }
     }
 
+    public function drop(int $id): void
+    {
+        EntityManager::_table(Invoice\Items::TABLE)->delete($id);
+    }
+
     /**
      * @param Invoice\Items $item
      */
