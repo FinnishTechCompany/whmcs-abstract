@@ -16,7 +16,10 @@ namespace IronLions\WHMCS\App\Service;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use IronLions\WHMCS\Domain\Repo\GatewayRepositoryInterface;
+use IronLions\WHMCS\Domain\Repo\Invoice\ItemsRepositoryInterface as InvoiceItemsRepositoryInterface;
+use IronLions\WHMCS\Domain\Repo\InvoiceRepositoryInterface;
 use IronLions\WHMCS\Infra\Query\Gateway;
+use IronLions\WHMCS\Infra\Query\Invoice;
 use WHMCS\Database\Capsule;
 
 /**
@@ -30,6 +33,22 @@ class EntityManager
     public static function gateway(): GatewayRepositoryInterface
     {
         return new Gateway();
+    }
+
+    /**
+     * @return InvoiceRepositoryInterface
+     */
+    public static function invoice(): InvoiceRepositoryInterface
+    {
+        return new Invoice();
+    }
+
+    /**
+     * @return InvoiceItemsRepositoryInterface
+     */
+    public static function invoiceItems(): InvoiceItemsRepositoryInterface
+    {
+        return new Invoice\Items();
     }
 
     /**
