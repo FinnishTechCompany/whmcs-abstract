@@ -1,6 +1,7 @@
 {
     "name": "ironlions/whmcs-abstract",
-    "type": "project",
+    "type": "library",
+    "description": "Abstraction for WHMCS modules.",
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15"
     },
