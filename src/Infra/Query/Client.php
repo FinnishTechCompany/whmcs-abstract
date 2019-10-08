@@ -162,7 +162,7 @@ final class Client extends AbstractQuery implements ClientRepositoryInterface
                 (string) $result->{C::FIELD_BANK_CODE},
                 (string) $result->{C::FIELD_BANK_ACCOUNT},
                 (string) $result->{C::FIELD_GATEWAY_ID},
-                (string) $result->{C::FIELD_LAST_LOGIN},
+                new DateTimeImmutable($result->{C::FIELD_LAST_LOGIN}),
                 (string) $result->{C::FIELD_IP},
                 (string) $result->{C::FIELD_HOST},
                 new C\Status($result->{C::FIELD_STATUS}),
