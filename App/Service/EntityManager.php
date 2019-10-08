@@ -15,9 +15,11 @@ namespace IronLions\WHMCS\App\Service;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
+use IronLions\WHMCS\Domain\Repo\ClientRepositoryInterface;
 use IronLions\WHMCS\Domain\Repo\GatewayRepositoryInterface;
 use IronLions\WHMCS\Domain\Repo\Invoice\ItemsRepositoryInterface as InvoiceItemsRepositoryInterface;
 use IronLions\WHMCS\Domain\Repo\InvoiceRepositoryInterface;
+use IronLions\WHMCS\Infra\Query\Client;
 use IronLions\WHMCS\Infra\Query\Gateway;
 use IronLions\WHMCS\Infra\Query\Invoice;
 use WHMCS\Database\Capsule;
@@ -27,6 +29,14 @@ use WHMCS\Database\Capsule;
  */
 class EntityManager
 {
+    /**
+     * @return ClientRepositoryInterface
+     */
+    public static function client(): ClientRepositoryInterface
+    {
+        return new Client();
+    }
+
     /**
      * @return GatewayRepositoryInterface
      */
