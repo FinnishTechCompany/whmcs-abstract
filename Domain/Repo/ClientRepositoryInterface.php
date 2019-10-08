@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace IronLions\WHMCS\Domain\Repo;
 
 use IronLions\WHMCS\Domain\Client;
-use IronLions\WHMCS\Domain\Invoice;
 
 interface ClientRepositoryInterface
 {

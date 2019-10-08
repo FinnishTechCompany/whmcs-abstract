@@ -1,15 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * NOTICE OF LICENSE
  *
- * This source file is released under commercial license by Lamia Oy.
+ * WHMCS Gateway Fees 2019 — NOTICE OF LICENSE
+ * This source file is released under commercial license by copyright holders.
+ * @copyright 2017-2019 (c) Niko Granö (https://granö.fi)
+ * @copyright 2014-2019 (c) IronLions (https://ironlions.fi)
  *
- * @copyright  Copyright (c) Lamia Oy (https://lamia.fi)
- * @author     Niko Grano <niko@lamia.fi>
  */
 
 namespace IronLions\WHMCS\Domain\Client;
+
 use IronLions\WHMCS\Domain\Exception\EnumValidationException;
 
 final class Status
@@ -30,11 +33,10 @@ final class Status
      */
     public function __construct(string $status)
     {
-        if (!\in_array($status, self::ALLOWED_VALUES, true))
-        {
+        if (!\in_array($status, self::ALLOWED_VALUES, true)) {
             throw new EnumValidationException(
                 'Invalid value given \''.$status.'\' when allowed values are '.
-                \implode(', ', self::ALLOWED_VALUES).'.'
+                implode(', ', self::ALLOWED_VALUES).'.'
             );
         }
         $this->status = $status;
@@ -53,7 +55,7 @@ final class Status
      */
     public function isActive(): bool
     {
-        return $this->status === 'Active';
+        return 'Active' === $this->status;
     }
 
     /**
@@ -61,7 +63,7 @@ final class Status
      */
     public function isInactive(): bool
     {
-        return $this->status === 'Inactive';
+        return 'Inactive' === $this->status;
     }
 
     /**
@@ -69,6 +71,6 @@ final class Status
      */
     public function isClosed(): bool
     {
-        return $this->status === 'Closed';
+        return 'Closed' === $this->status;
     }
 }

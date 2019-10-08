@@ -1,15 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * NOTICE OF LICENSE
  *
- * This source file is released under commercial license by Lamia Oy.
+ * WHMCS Gateway Fees 2019 — NOTICE OF LICENSE
+ * This source file is released under commercial license by copyright holders.
+ * @copyright 2017-2019 (c) Niko Granö (https://granö.fi)
+ * @copyright 2014-2019 (c) IronLions (https://ironlions.fi)
  *
- * @copyright  Copyright (c) Lamia Oy (https://lamia.fi)
- * @author     Niko Grano <niko@lamia.fi>
  */
 
 namespace IronLions\WHMCS\Domain;
+
 use IronLions\WHMCS\Domain\Client\Status;
 
 final class Client
@@ -354,8 +357,7 @@ final class Client
         \DateTimeImmutable $created,
         \DateTimeImmutable $updated,
         \DateTimeImmutable $pwResetKeyExpire
-    )
-    {
+    ) {
         $this->id = $id;
         $this->uuid = $uuid;
         $this->firstname = $firstname;
@@ -864,541 +866,649 @@ final class Client
 
     /**
      * @param string $firstname
+     *
      * @return Client
      */
-    public function setFirstname(string $firstname): Client
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
+
         return $this;
     }
 
     /**
      * @param string $lastname
+     *
      * @return Client
      */
-    public function setLastname(string $lastname): Client
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
         return $this;
     }
 
     /**
      * @param string $companyName
+     *
      * @return Client
      */
-    public function setCompanyName(string $companyName): Client
+    public function setCompanyName(string $companyName): self
     {
         $this->companyName = $companyName;
+
         return $this;
     }
 
     /**
      * @param string $email
+     *
      * @return Client
      */
-    public function setEmail(string $email): Client
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
 
     /**
      * @param string $address1
+     *
      * @return Client
      */
-    public function setAddress1(string $address1): Client
+    public function setAddress1(string $address1): self
     {
         $this->address1 = $address1;
+
         return $this;
     }
 
     /**
      * @param string $address2
+     *
      * @return Client
      */
-    public function setAddress2(string $address2): Client
+    public function setAddress2(string $address2): self
     {
         $this->address2 = $address2;
+
         return $this;
     }
 
     /**
      * @param string $city
+     *
      * @return Client
      */
-    public function setCity(string $city): Client
+    public function setCity(string $city): self
     {
         $this->city = $city;
+
         return $this;
     }
 
     /**
      * @param string $state
+     *
      * @return Client
      */
-    public function setState(string $state): Client
+    public function setState(string $state): self
     {
         $this->state = $state;
+
         return $this;
     }
 
     /**
      * @param string $postCode
+     *
      * @return Client
      */
-    public function setPostCode(string $postCode): Client
+    public function setPostCode(string $postCode): self
     {
         $this->postCode = $postCode;
+
         return $this;
     }
 
     /**
      * @param string $country
+     *
      * @return Client
      */
-    public function setCountry(string $country): Client
+    public function setCountry(string $country): self
     {
         $this->country = $country;
+
         return $this;
     }
 
     /**
      * @param string $phoneNumber
+     *
      * @return Client
      */
-    public function setPhoneNumber(string $phoneNumber): Client
+    public function setPhoneNumber(string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
+
         return $this;
     }
 
     /**
      * @param string $taxId
+     *
      * @return Client
      */
-    public function setTaxId(string $taxId): Client
+    public function setTaxId(string $taxId): self
     {
         $this->taxId = $taxId;
+
         return $this;
     }
 
     /**
      * @param string $password
+     *
      * @return Client
      */
-    public function setPassword(string $password): Client
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
         return $this;
     }
 
     /**
      * @param string $authModule
+     *
      * @return Client
      */
-    public function setAuthModule(string $authModule): Client
+    public function setAuthModule(string $authModule): self
     {
         $this->authModule = $authModule;
+
         return $this;
     }
 
     /**
      * @param string $authData
+     *
      * @return Client
      */
-    public function setAuthData(string $authData): Client
+    public function setAuthData(string $authData): self
     {
         $this->authData = $authData;
+
         return $this;
     }
 
     /**
      * @param int $currency
+     *
      * @return Client
      */
-    public function setCurrency(int $currency): Client
+    public function setCurrency(int $currency): self
     {
         $this->currency = $currency;
+
         return $this;
     }
 
     /**
      * @param string $defaultGateway
+     *
      * @return Client
      */
-    public function setDefaultGateway(string $defaultGateway): Client
+    public function setDefaultGateway(string $defaultGateway): self
     {
         $this->defaultGateway = $defaultGateway;
+
         return $this;
     }
 
     /**
      * @param float $credit
+     *
      * @return Client
      */
-    public function setCredit(float $credit): Client
+    public function setCredit(float $credit): self
     {
         $this->credit = $credit;
+
         return $this;
     }
 
     /**
      * @param bool $taxExempt
+     *
      * @return Client
      */
-    public function setTaxExempt(bool $taxExempt): Client
+    public function setTaxExempt(bool $taxExempt): self
     {
         $this->taxExempt = $taxExempt;
+
         return $this;
     }
 
     /**
      * @param bool $lateFeeOverride
+     *
      * @return Client
      */
-    public function setLateFeeOverride(bool $lateFeeOverride): Client
+    public function setLateFeeOverride(bool $lateFeeOverride): self
     {
         $this->lateFeeOverride = $lateFeeOverride;
+
         return $this;
     }
 
     /**
      * @param bool $dueNoticesOverride
+     *
      * @return Client
      */
-    public function setDueNoticesOverride(bool $dueNoticesOverride): Client
+    public function setDueNoticesOverride(bool $dueNoticesOverride): self
     {
         $this->dueNoticesOverride = $dueNoticesOverride;
+
         return $this;
     }
 
     /**
      * @param bool $separateInvoices
+     *
      * @return Client
      */
-    public function setSeparateInvoices(bool $separateInvoices): Client
+    public function setSeparateInvoices(bool $separateInvoices): self
     {
         $this->separateInvoices = $separateInvoices;
+
         return $this;
     }
 
     /**
      * @param bool $disableAutoCC
+     *
      * @return Client
      */
-    public function setDisableAutoCC(bool $disableAutoCC): Client
+    public function setDisableAutoCC(bool $disableAutoCC): self
     {
         $this->disableAutoCC = $disableAutoCC;
+
         return $this;
     }
 
     /**
      * @param \DateTimeImmutable $dateCreated
+     *
      * @return Client
      */
-    public function setDateCreated(\DateTimeImmutable $dateCreated): Client
+    public function setDateCreated(\DateTimeImmutable $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
+
         return $this;
     }
 
     /**
      * @param string $notes
+     *
      * @return Client
      */
-    public function setNotes(string $notes): Client
+    public function setNotes(string $notes): self
     {
         $this->notes = $notes;
+
         return $this;
     }
 
     /**
      * @param int $billingCid
+     *
      * @return Client
      */
-    public function setBillingCid(int $billingCid): Client
+    public function setBillingCid(int $billingCid): self
     {
         $this->billingCid = $billingCid;
+
         return $this;
     }
 
     /**
      * @param int $securityQid
+     *
      * @return Client
      */
-    public function setSecurityQid(int $securityQid): Client
+    public function setSecurityQid(int $securityQid): self
     {
         $this->securityQid = $securityQid;
+
         return $this;
     }
 
     /**
      * @param string $securityQuestionAnswer
+     *
      * @return Client
      */
-    public function setSecurityQuestionAnswer(string $securityQuestionAnswer): Client
+    public function setSecurityQuestionAnswer(string $securityQuestionAnswer): self
     {
         $this->securityQuestionAnswer = $securityQuestionAnswer;
+
         return $this;
     }
 
     /**
      * @param int $groupId
+     *
      * @return Client
      */
-    public function setGroupId(int $groupId): Client
+    public function setGroupId(int $groupId): self
     {
         $this->groupId = $groupId;
+
         return $this;
     }
 
     /**
      * @param string $cardType
+     *
      * @return Client
      */
-    public function setCardType(string $cardType): Client
+    public function setCardType(string $cardType): self
     {
         $this->cardType = $cardType;
+
         return $this;
     }
 
     /**
      * @param string $cardLastFour
+     *
      * @return Client
      */
-    public function setCardLastFour(string $cardLastFour): Client
+    public function setCardLastFour(string $cardLastFour): self
     {
         $this->cardLastFour = $cardLastFour;
+
         return $this;
     }
 
     /**
      * @param string $cardNumber
+     *
      * @return Client
      */
-    public function setCardNumber(string $cardNumber): Client
+    public function setCardNumber(string $cardNumber): self
     {
         $this->cardNumber = $cardNumber;
+
         return $this;
     }
 
     /**
      * @param string $startDate
+     *
      * @return Client
      */
-    public function setStartDate(string $startDate): Client
+    public function setStartDate(string $startDate): self
     {
         $this->startDate = $startDate;
+
         return $this;
     }
 
     /**
      * @param string $expDate
+     *
      * @return Client
      */
-    public function setExpDate(string $expDate): Client
+    public function setExpDate(string $expDate): self
     {
         $this->expDate = $expDate;
+
         return $this;
     }
 
     /**
      * @param string $issueNumber
+     *
      * @return Client
      */
-    public function setIssueNumber(string $issueNumber): Client
+    public function setIssueNumber(string $issueNumber): self
     {
         $this->issueNumber = $issueNumber;
+
         return $this;
     }
 
     /**
      * @param string $bankName
+     *
      * @return Client
      */
-    public function setBankName(string $bankName): Client
+    public function setBankName(string $bankName): self
     {
         $this->bankName = $bankName;
+
         return $this;
     }
 
     /**
      * @param string $bankType
+     *
      * @return Client
      */
-    public function setBankType(string $bankType): Client
+    public function setBankType(string $bankType): self
     {
         $this->bankType = $bankType;
+
         return $this;
     }
 
     /**
      * @param string $bankCode
+     *
      * @return Client
      */
-    public function setBankCode(string $bankCode): Client
+    public function setBankCode(string $bankCode): self
     {
         $this->bankCode = $bankCode;
+
         return $this;
     }
 
     /**
      * @param string $bankAcct
+     *
      * @return Client
      */
-    public function setBankAcct(string $bankAcct): Client
+    public function setBankAcct(string $bankAcct): self
     {
         $this->bankAcct = $bankAcct;
+
         return $this;
     }
 
     /**
      * @param string $gatewayId
+     *
      * @return Client
      */
-    public function setGatewayId(string $gatewayId): Client
+    public function setGatewayId(string $gatewayId): self
     {
         $this->gatewayId = $gatewayId;
+
         return $this;
     }
 
     /**
      * @param \DateTimeImmutable $lastLogin
+     *
      * @return Client
      */
-    public function setLastLogin(\DateTimeImmutable $lastLogin): Client
+    public function setLastLogin(\DateTimeImmutable $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
+
         return $this;
     }
 
     /**
      * @param string $ip
+     *
      * @return Client
      */
-    public function setIp(string $ip): Client
+    public function setIp(string $ip): self
     {
         $this->ip = $ip;
+
         return $this;
     }
 
     /**
      * @param string $host
+     *
      * @return Client
      */
-    public function setHost(string $host): Client
+    public function setHost(string $host): self
     {
         $this->host = $host;
+
         return $this;
     }
 
     /**
      * @param Status $status
+     *
      * @return Client
      */
-    public function setStatus(Status $status): Client
+    public function setStatus(Status $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
     /**
      * @param string $language
+     *
      * @return Client
      */
-    public function setLanguage(string $language): Client
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
+
         return $this;
     }
 
     /**
      * @param string $pwResetKey
+     *
      * @return Client
      */
-    public function setPwResetKey(string $pwResetKey): Client
+    public function setPwResetKey(string $pwResetKey): self
     {
         $this->pwResetKey = $pwResetKey;
+
         return $this;
     }
 
     /**
      * @param bool $emailOptOut
+     *
      * @return Client
      */
-    public function setEmailOptOut(bool $emailOptOut): Client
+    public function setEmailOptOut(bool $emailOptOut): self
     {
         $this->emailOptOut = $emailOptOut;
+
         return $this;
     }
 
     /**
      * @param bool $marketingEmailsOptIn
+     *
      * @return Client
      */
-    public function setMarketingEmailsOptIn(bool $marketingEmailsOptIn): Client
+    public function setMarketingEmailsOptIn(bool $marketingEmailsOptIn): self
     {
         $this->marketingEmailsOptIn = $marketingEmailsOptIn;
+
         return $this;
     }
 
     /**
      * @param bool $autoCloseOverride
+     *
      * @return Client
      */
-    public function setAutoCloseOverride(bool $autoCloseOverride): Client
+    public function setAutoCloseOverride(bool $autoCloseOverride): self
     {
         $this->autoCloseOverride = $autoCloseOverride;
+
         return $this;
     }
 
     /**
      * @param bool $allowSSO
+     *
      * @return Client
      */
-    public function setAllowSSO(bool $allowSSO): Client
+    public function setAllowSSO(bool $allowSSO): self
     {
         $this->allowSSO = $allowSSO;
+
         return $this;
     }
 
     /**
      * @param bool $emailVerified
+     *
      * @return Client
      */
-    public function setEmailVerified(bool $emailVerified): Client
+    public function setEmailVerified(bool $emailVerified): self
     {
         $this->emailVerified = $emailVerified;
+
         return $this;
     }
 
     /**
      * @param \DateTimeImmutable $created
+     *
      * @return Client
      */
-    public function setCreated(\DateTimeImmutable $created): Client
+    public function setCreated(\DateTimeImmutable $created): self
     {
         $this->created = $created;
+
         return $this;
     }
 
     /**
      * @param \DateTimeImmutable $updated
+     *
      * @return Client
      */
-    public function setUpdated(\DateTimeImmutable $updated): Client
+    public function setUpdated(\DateTimeImmutable $updated): self
     {
         $this->updated = $updated;
+
         return $this;
     }
 
     /**
      * @param \DateTimeImmutable $pwResetKeyExpire
+     *
      * @return Client
      */
-    public function setPwResetKeyExpire(\DateTimeImmutable $pwResetKeyExpire): Client
+    public function setPwResetKeyExpire(\DateTimeImmutable $pwResetKeyExpire): self
     {
         $this->pwResetKeyExpire = $pwResetKeyExpire;
+
         return $this;
     }
 }
