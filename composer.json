@@ -2,9 +2,6 @@
     "name": "ironlions/whmcs-abstract",
     "type": "library",
     "description": "Abstraction for WHMCS modules.",
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.15"
-    },
     "license": "proprietary",
     "authors": [
         {
@@ -13,7 +10,16 @@
         }
     ],
     "require": {
-        "league/container": "^3.3"
+        "league/container": "^3.3",
+        "symfony/http-kernel": "^5.1",
+        "symfony/event-dispatcher": "^5.1",
+        "symfony/dependency-injection": "^5.1",
+        "symfony/yaml": "^5.1",
+        "symfony/config": "^5.1",
+        "symfony/messenger": "^5.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "v2.16.4"
     },
     "autoload": {
         "files": ["src/functions.php"],
