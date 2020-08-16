@@ -19,6 +19,9 @@ if (!function_exists('add_hook')) {
 }
 
 if (!function_exists('addEventSubscriber')) {
+    /**
+     * @param string $class Must be class implementing IronLions\WHMCS\App\Service\AbstractEventSubscriber
+     */
     function addEventSubscriber(string $class): void
     {
         foreach ($class::subscribe() as $event => $callable) {
