@@ -18,6 +18,12 @@ if (!function_exists('add_hook')) {
     }
 }
 
+if (!function_exists('logModuleCall')) {
+    function logModuleCall(string $type, string $function, array $params, string $message, string $trace): void
+    {
+    }
+}
+
 if (!function_exists('addEventSubscriber')) {
     /**
      * @param string $class Must be class implementing IronLions\WHMCS\App\Service\AbstractEventSubscriber

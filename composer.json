@@ -12,7 +12,9 @@
             "email": "support@ironlions.fi"
         }
     ],
-    "require": {},
+    "require": {
+        "league/container": "^3.3"
+    },
     "autoload": {
         "files": ["src/functions.php"],
         "psr-4": {
