@@ -96,24 +96,28 @@ final class Kernel
         $this->terminated = true;
     }
 
+    /**
     public function __destruct() {
         if ($this->terminated === false) {
+            if ($this->response === null) {
+                $this->handle();
+            }
             $this->kernel->terminate($this->request, $this->response);
         }
-    }
+    } */
 
     private function busMiddlewares(): array
     {
+        $handlers = [];
+        foreach (self::$busConfig as $command) {
+            foreach (self::$cb->findTaggedServiceIds($command) as $handler => $data)
+            {
+                $handlers[$command][] = self::$cb->get($handler);
+            }
+        }
 
-        var_dump(self::$busConfig);
-        die;
         return [
-            new HandleMessageMiddleware(
-                new HandlersLocator([
-
-                ]),
-                false
-            )
+            new HandleMessageMiddleware(new HandlersLocator($handlers))
         ];
     }
 }
