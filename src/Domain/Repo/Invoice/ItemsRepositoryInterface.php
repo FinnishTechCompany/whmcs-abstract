@@ -19,19 +19,11 @@ use IronLions\WHMCS\Domain\Invoice;
 interface ItemsRepositoryInterface
 {
     /**
-     * @param int $invoiceId
-     *
      * @return Invoice\Items[]
      */
     public function getForInvoice(int $invoiceId): array;
 
-    /**
-     * @param Invoice\Items $item
-     */
     public function store(Invoice\Items $item): void;
 
-    /**
-     * @param int $getId
-     */
     public function drop(int $getId): void;
 }

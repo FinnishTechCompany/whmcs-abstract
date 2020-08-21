@@ -14,11 +14,17 @@ declare(strict_types=1);
 
 namespace IronLions\WHMCS\Domain\Repo;
 
-use IronLions\WHMCS\Domain\Invoice;
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
+use IronLions\WHMCS\Domain\Server;
 
-interface InvoiceRepositoryInterface
+interface ServerRepositoryInterface
 {
-    public function getOneById(int $id): Invoice;
+    public function getOneById(int $id): Server;
 
-    public function update(Invoice $invoice): void;
+    public function update(Server $invoice): void;
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function getOneByType(string $type): Server;
 }

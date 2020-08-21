@@ -16,30 +16,15 @@ namespace IronLions\WHMCS\Domain\Core;
 
 final class Route
 {
-    /**
-     * @var string
-     */
-    private $path;
-    /**
-     * @var string
-     */
-    private $controller;
+    private string $path;
+    private string $controller;
+    private bool $adminArea;
+    private string $action;
+    private string $name;
     /**
      * @var string[]
      */
-    private $allowedMethods;
-    /**
-     * @var bool
-     */
-    private $adminArea;
-    /**
-     * @var string
-     */
-    private $action;
-    /**
-     * @var string
-     */
-    private $name;
+    private array $allowedMethods;
 
     public function __construct(
         string $name,
@@ -57,17 +42,11 @@ final class Route
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return string
-     */
     public function getController(): string
     {
         return $this->controller;
@@ -81,35 +60,21 @@ final class Route
         return $this->allowedMethods;
     }
 
-    /**
-     * @return bool
-     */
     public function isAdminArea(): bool
     {
         return $this->adminArea;
     }
 
-    /**
-     * @return string
-     */
     public function getAction(): string
     {
         return $this->action;
     }
 
-    /**
-     * @param string $method
-     *
-     * @return bool
-     */
     public function isAllowed(string $method): bool
     {
         return \in_array(strtoupper($method), $this->allowedMethods, true);
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

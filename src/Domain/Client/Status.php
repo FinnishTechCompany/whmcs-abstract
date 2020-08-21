@@ -22,23 +22,15 @@ final class Status
      * @var string[]
      */
     public const ALLOWED_VALUES = ['Active', 'Inactive', 'Closed'];
-    /**
-     * @var string
-     */
-    private $status;
+    private string $status;
 
     /**
      * Status constructor.
-     *
-     * @param string $status
      */
     public function __construct(string $status)
     {
         if (!\in_array($status, self::ALLOWED_VALUES, true)) {
-            throw new EnumValidationException(
-                'Invalid value given \''.$status.'\' when allowed values are '.
-                implode(', ', self::ALLOWED_VALUES).'.'
-            );
+            throw new EnumValidationException('Invalid value given \''.$status.'\' when allowed values are '.implode(', ', self::ALLOWED_VALUES).'.');
         }
         $this->status = $status;
     }
@@ -51,25 +43,16 @@ final class Status
         return $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return 'Active' === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isInactive(): bool
     {
         return 'Inactive' === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isClosed(): bool
     {
         return 'Closed' === $this->status;

@@ -16,43 +16,29 @@ namespace IronLions\WHMCS\Domain\Core;
 
 final class Request
 {
-    /**
-     * @var array
-     */
-    private $vars;
+    private array $vars;
 
     public function __construct(array $vars)
     {
         $this->vars = $vars;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return isset($_REQUEST['action']) ? $_REQUEST['action'] : '/';
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    /**
-     * @return array
-     */
     public function getVars(): array
     {
         return $this->vars;
     }
 
     /**
-     * @param string|null $name
-     *
      * @return mixed
      */
     public function get(?string $name = null)

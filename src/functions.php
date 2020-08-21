@@ -24,6 +24,20 @@ if (!function_exists('logModuleCall')) {
     }
 }
 
+if (!function_exists('decrypt')) {
+    function decrypt($password): string
+    {
+        return $password;
+    }
+}
+
+if (!function_exists('encrypt')) {
+    function encrypt($password): string
+    {
+        return $password;
+    }
+}
+
 if (!function_exists('addEventSubscriber')) {
     /**
      * @param string $class Must be class implementing IronLions\WHMCS\App\Service\AbstractEventSubscriber

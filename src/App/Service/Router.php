@@ -20,27 +20,15 @@ use IronLions\WHMCS\Domain\Exception\Http\RouteNotFoundException;
 
 final class Router
 {
-    /**
-     * @var Route[]
-     */
-    private static $routes = [];
+    private static array $routes = [];
 
-    /**
-     * @param Route $route
-     */
     public static function add(Route $route): void
     {
         self::$routes[$route->getName()] = $route;
     }
 
     /**
-     * @param string $path
-     * @param string $method
-     * @param bool   $admin
-     *
      * @throws RouteNotFoundException
-     *
-     * @return Route
      */
     public static function get(string $path, string $method, bool $admin): Route
     {
@@ -55,11 +43,6 @@ final class Router
         throw new RouteNotFoundException('Page not found!');
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Route
-     */
     public static function getByName(string $name): Route
     {
         if (isset(self::$routes[$name])) {

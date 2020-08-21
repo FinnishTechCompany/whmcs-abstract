@@ -19,10 +19,7 @@ use IronLions\WHMCS\App\Service\Render;
 
 class Response
 {
-    /**
-     * @var string
-     */
-    private $body;
+    private string $body;
 
     public function __construct(string $body)
     {

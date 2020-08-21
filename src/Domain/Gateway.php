@@ -16,34 +16,13 @@ namespace IronLions\WHMCS\Domain;
 
 final class Gateway
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
+    public string $gateway;
+    public string $setting;
+    public string $value;
+    public int $order;
 
     /**
-     * @var string
-     */
-    private $gateway;
-
-    /**
-     * @var string
-     */
-    private $setting;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @var int
-     */
-    private $order;
-
-    /**
-     * @param \stdClass $item
-     *
      * @return static
      */
     public static function fromStd(\stdClass $item): self
@@ -59,12 +38,6 @@ final class Gateway
 
     /**
      * Gateway constructor.
-     *
-     * @param int    $id
-     * @param string $gateway
-     * @param string $setting
-     * @param string $value
-     * @param int    $order
      */
     public function __construct(
         int $id,
@@ -80,51 +53,13 @@ final class Gateway
         $this->order = $order;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getGateway(): string
-    {
-        return $this->gateway;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSetting(): string
-    {
-        return $this->setting;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder(): int
-    {
-        return $this->order;
-    }
-
-    /**
-     * @return string
-     */
     public function getDisplayName(): string
     {
-        return ucfirst(empty($this->getValue()) ? $this->getGateway() : $this->getValue());
+        return ucfirst(empty($this->value) ? $this->gateway : $this->value);
     }
 }

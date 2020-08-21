@@ -19,14 +19,11 @@ use Illuminate\Support\Collection;
 use IronLions\WHMCS\App\Service\EntityManager as em;
 use IronLions\WHMCS\Domain\Invoice;
 use IronLions\WHMCS\Domain\Repo\Invoice\ItemsRepositoryInterface;
-use IronLions\WHMCS\GwFees\App\Service\EntityManager;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
 final class Items extends AbstractQuery implements ItemsRepositoryInterface
 {
     /**
-     * @param int $invoiceId
-     *
      * @throws \Exception
      *
      * @return Invoice\Items[]
@@ -41,9 +38,6 @@ final class Items extends AbstractQuery implements ItemsRepositoryInterface
         return $this->mapEntity($items);
     }
 
-    /**
-     * @param Invoice\Items $item
-     */
     public function store(Invoice\Items $item): void
     {
         if (null === $item->getId()) {
@@ -55,32 +49,29 @@ final class Items extends AbstractQuery implements ItemsRepositoryInterface
 
     public function drop(int $id): void
     {
-        EntityManager::_table(Invoice\Items::TABLE)->delete($id);
+        em::_table(Invoice\Items::TABLE)->delete($id);
     }
 
-    /**
-     * @param Invoice\Items $item
-     */
     public function storeNew(Invoice\Items $item): void
     {
         try {
-            EntityManager::_connection()
+            em::_connection()
                 ->transaction(static function (Connection $connection) use ($item) {
                     $connection
                         ->table(Invoice\Items::TABLE)
                         ->insert(
                             [
                                 Invoice\Items::FIELD_ID             => $item->getId(),
-                                Invoice\Items::FIELD_INVOICE_ID     => $item->getInvoiceId(),
-                                Invoice\Items::FIELD_USER_ID        => $item->getUserId(),
-                                Invoice\Items::FIELD_TYPE           => $item->getType(),
-                                Invoice\Items::FIELD_REL_ID         => $item->getRelId(),
-                                Invoice\Items::FIELD_DESCRIPTION    => $item->getDescription(),
-                                Invoice\Items::FIELD_AMOUNT         => $item->getAmount(),
-                                Invoice\Items::FIELD_TAXED          => $item->isTaxed(),
-                                Invoice\Items::FIELD_DUE_DATE       => $item->getDueDate(),
-                                Invoice\Items::FIELD_PAYMENT_METHOD => $item->getPaymentMethod(),
-                                Invoice\Items::FIELD_NOTES          => $item->getNotes(),
+                                Invoice\Items::FIELD_INVOICE_ID     => $item->invoiceId,
+                                Invoice\Items::FIELD_USER_ID        => $item->userId,
+                                Invoice\Items::FIELD_TYPE           => $item->type,
+                                Invoice\Items::FIELD_REL_ID         => $item->relId,
+                                Invoice\Items::FIELD_DESCRIPTION    => $item->description,
+                                Invoice\Items::FIELD_AMOUNT         => $item->amount,
+                                Invoice\Items::FIELD_TAXED          => $item->taxed,
+                                Invoice\Items::FIELD_DUE_DATE       => $item->dueDate,
+                                Invoice\Items::FIELD_PAYMENT_METHOD => $item->paymentMethod,
+                                Invoice\Items::FIELD_NOTES          => $item->notes,
                             ]
                         );
                 });
@@ -89,32 +80,27 @@ final class Items extends AbstractQuery implements ItemsRepositoryInterface
         }
     }
 
-    /**
-     * @param Invoice\Items $item
-     */
     public function storeOld(Invoice\Items $item): void
     {
-        EntityManager::_table(Invoice\Items::TABLE)
+        em::_table(Invoice\Items::TABLE)
             ->where(Invoice\Items::FIELD_ID, '=', $item->getId())
             ->update(
                 [
-                    Invoice\Items::FIELD_INVOICE_ID     => $item->getInvoiceId(),
-                    Invoice\Items::FIELD_USER_ID        => $item->getUserId(),
-                    Invoice\Items::FIELD_TYPE           => $item->getType(),
-                    Invoice\Items::FIELD_REL_ID         => $item->getRelId(),
-                    Invoice\Items::FIELD_DESCRIPTION    => $item->getDescription(),
-                    Invoice\Items::FIELD_AMOUNT         => $item->getAmount(),
-                    Invoice\Items::FIELD_TAXED          => $item->isTaxed(),
-                    Invoice\Items::FIELD_DUE_DATE       => $item->getDueDate(),
-                    Invoice\Items::FIELD_PAYMENT_METHOD => $item->getPaymentMethod(),
-                    Invoice\Items::FIELD_NOTES          => $item->getNotes(),
+                    Invoice\Items::FIELD_INVOICE_ID     => $item->invoiceId,
+                    Invoice\Items::FIELD_USER_ID        => $item->userId,
+                    Invoice\Items::FIELD_TYPE           => $item->type,
+                    Invoice\Items::FIELD_REL_ID         => $item->relId,
+                    Invoice\Items::FIELD_DESCRIPTION    => $item->description,
+                    Invoice\Items::FIELD_AMOUNT         => $item->amount,
+                    Invoice\Items::FIELD_TAXED          => $item->taxed,
+                    Invoice\Items::FIELD_DUE_DATE       => $item->dueDate,
+                    Invoice\Items::FIELD_PAYMENT_METHOD => $item->paymentMethod,
+                    Invoice\Items::FIELD_NOTES          => $item->notes,
                 ]
             );
     }
 
     /**
-     * @param array $items
-     *
      * @throws \Exception
      *
      * @return Invoice\Items[]

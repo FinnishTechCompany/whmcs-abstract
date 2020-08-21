@@ -18,20 +18,12 @@ use IronLions\WHMCS\Domain\Core\Variables;
 
 final class Render
 {
-    /**
-     * @var string
-     */
-    private $file;
-    /**
-     * @var array
-     */
-    private $variables;
+    private string $file;
+
+    private array $variables;
 
     /**
      * Render constructor.
-     *
-     * @param string $file
-     * @param array  $variables
      */
     public function __construct(string $file, array $variables)
     {
@@ -39,33 +31,21 @@ final class Render
         $this->variables = $variables;
     }
 
-    /**
-     * @return Variables
-     */
     protected function getModule(): Variables
     {
         return $this->variables['module'];
     }
 
-    /**
-     * @return array
-     */
     protected function getVars(): array
     {
         return $this->variables;
     }
 
-    /**
-     * @param string $name
-     */
     protected function getRoute(string $name): void
     {
         echo $this->getModule()->getModulelink().'&action='.Router::getByName($name)->getPath();
     }
 
-    /**
-     * @param string $block
-     */
     protected function getBlock(string $block): void
     {
         ['file' => $render_file] = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1)[0];
@@ -80,9 +60,6 @@ final class Render
         require $render_file;
     }
 
-    /**
-     * @return string
-     */
     public function __invoke(): string
     {
         extract($this->variables, EXTR_SKIP);

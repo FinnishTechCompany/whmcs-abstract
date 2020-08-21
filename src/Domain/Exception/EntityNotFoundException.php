@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  *
  * WHMCS Abstract 2020 — NOTICE OF LICENSE
@@ -12,13 +10,12 @@ declare(strict_types=1);
  *
  */
 
-namespace IronLions\WHMCS\Domain\Repo;
+namespace IronLions\WHMCS\Domain\Exception;
 
-use IronLions\WHMCS\Domain\Invoice;
-
-interface InvoiceRepositoryInterface
+final class EntityNotFoundException extends AbstractException
 {
-    public function getOneById(int $id): Invoice;
-
-    public function update(Invoice $invoice): void;
+    public function __construct()
+    {
+        parent::__construct('Entity not found with given parameters.');
+    }
 }

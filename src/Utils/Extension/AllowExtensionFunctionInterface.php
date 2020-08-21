@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  *
  * WHMCS Abstract 2020 — NOTICE OF LICENSE
@@ -12,13 +10,8 @@ declare(strict_types=1);
  *
  */
 
-namespace IronLions\WHMCS\Domain\Repo;
+namespace IronLions\WHMCS\Utils\Extension;
 
-use IronLions\WHMCS\Domain\Invoice;
-
-interface InvoiceRepositoryInterface
+interface AllowExtensionFunctionInterface
 {
-    public function getOneById(int $id): Invoice;
-
-    public function update(Invoice $invoice): void;
 }

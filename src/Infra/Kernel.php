@@ -1,16 +1,24 @@
 <?php
 
+/**
+ *
+ * WHMCS Abstract 2020 — NOTICE OF LICENSE
+ * This source file is released under commercial license by copyright holders.
+ * Please see LICENSE file for more specific licensing terms.
+ * @copyright 2017-2020 (c) Niko Granö (https://granö.fi)
+ * @copyright 2014-2020 (c) Fiteco (https://fiteco.fi)
+ *
+ */
 
 namespace IronLions\WHMCS\Infra;
 
-
-use League\Container\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
@@ -25,44 +33,22 @@ use Symfony\Component\Messenger\Stamp\StampInterface;
 
 final class Kernel
 {
-    /** @var Request */
-    private $request;
-    /** @var Response */
-    private $response;
-    /** @var ControllerResolverInterface */
-    private $controllerResolver;
-    /** @var HttpKernelInterface */
-    private $kernel;
-    /** @var EventDispatcherInterface */
-    private $dispatcher;
-    /** @var ArgumentResolverInterface */
-    private $argumentResolver;
-    /** @var MessageBusInterface */
-    private $bus;
+    private Request $request;
+    private Response $response;
+    private ControllerResolverInterface $controllerResolver;
+    private HttpKernelInterface $kernel;
+    private EventDispatcherInterface $dispatcher;
+    private ArgumentResolverInterface $argumentResolver;
+    private MessageBusInterface $bus;
+    //private bool $terminated = false;
 
-    private $terminated = false;
+    private static ContainerBuilder $cb;
+    private static array $busConfig = [];
 
-    /** @var ContainerBuilder */
-    private static $cb;
-
-    /** @var array */
-    private static $busConfig = [];
-
-    public static function init(): void {
-        self::$cb = new ContainerBuilder();
-    }
-
-    public static function __cb(): ContainerBuilder {
-        return self::$cb;
-    }
-
-    public static function addCommands(array $bus)
+    public function __construct()
     {
-        self::$busConfig = array_merge($bus, self::$busConfig);
-    }
-
-    public function __construct() {
-        self::$cb->compile();
+        self::$cb->isCompiled() ?: self::$cb->compile();
+        $this->argumentResolver = new ArgumentResolver();
         $this->bus = new MessageBus($this->busMiddlewares());
         $this->request = Request::createFromGlobals();
         $this->dispatcher = new EventDispatcher();
@@ -78,46 +64,60 @@ final class Kernel
     /**
      * @param $command Envelope|object
      * @param StampInterface[] $stamps
-     * @return Envelope
      */
     public function bus($command, array $stamps = []): Envelope
     {
         return $this->bus->dispatch($command, $stamps);
     }
 
-    public function handle(): Response {
+    public function handle(): Response
+    {
         $this->response = $this->kernel->handle($this->request, HttpKernelInterface::SUB_REQUEST, false);
 
         return $this->response;
     }
 
-    public function terminate(): void {
+    public function terminate(): void
+    {
         $this->kernel->terminate($this->request, $this->response);
-        $this->terminated = true;
+        //$this->terminated = true;
     }
 
     /**
-    public function __destruct() {
-        if ($this->terminated === false) {
-            if ($this->response === null) {
-                $this->handle();
-            }
-            $this->kernel->terminate($this->request, $this->response);
-        }
-    } */
-
+     * public function __destruct() {
+     * if ($this->terminated === false) {
+     * if ($this->response === null) {
+     * $this->handle();
+     * }
+     * $this->kernel->terminate($this->request, $this->response);
+     * }
+     * } */
     private function busMiddlewares(): array
     {
         $handlers = [];
         foreach (self::$busConfig as $command) {
-            foreach (self::$cb->findTaggedServiceIds($command) as $handler => $data)
-            {
+            foreach (self::$cb->findTaggedServiceIds($command) as $handler => $data) {
                 $handlers[$command][] = self::$cb->get($handler);
             }
         }
 
         return [
-            new HandleMessageMiddleware(new HandlersLocator($handlers))
+            new HandleMessageMiddleware(new HandlersLocator($handlers)),
         ];
+    }
+
+    public static function init(): void
+    {
+        self::$cb = new ContainerBuilder();
+    }
+
+    public static function __cb(): ContainerBuilder
+    {
+        return self::$cb;
+    }
+
+    public static function addCommands(array $bus): void
+    {
+        self::$busConfig = array_merge($bus, self::$busConfig);
     }
 }

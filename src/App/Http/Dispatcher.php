@@ -21,13 +21,10 @@ use IronLions\WHMCS\Domain\Exception\Http\RouteNotFoundException;
 
 final class Dispatcher
 {
-    public static $vars = [];
+    public static array $vars = [];
     public const TYPE_ADMIN = 0x1;
     public const TYPE_CLIENT = 0x2;
-    /**
-     * @var int
-     */
-    private $type;
+    private int $type;
 
     public function __construct(int $type = self::TYPE_ADMIN)
     {
@@ -55,12 +52,6 @@ final class Dispatcher
         return 'Error: Return must be object of Response.';
     }
 
-    /**
-     * @param array $vars
-     * @param int   $type
-     *
-     * @return string
-     */
     public static function doDispatch(array $vars, int $type): string
     {
         try {

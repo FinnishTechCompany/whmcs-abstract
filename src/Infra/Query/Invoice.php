@@ -24,11 +24,7 @@ use IronLions\WHMCS\Infra\AbstractQuery;
 final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
 {
     /**
-     * @param int $id
-     *
      * @throws Exception
-     *
-     * @return I
      */
     public function getOneById(int $id): I
     {
@@ -50,29 +46,27 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
             ->where(I::FIELD_ID, '=', $invoice->getId())
             ->update(
                 [
-                    I::FIELD_INVOICE_NUM            => $invoice->getInvoiceNumber(),
-                    I::FIELD_DATE                   => $invoice->getDate(),
-                    I::FIELD_DUE_DATE               => $invoice->getDueDate(),
-                    I::FIELD_DATE_PAID              => $invoice->getDatePaid(),
-                    I::FIELD_LAST_CAPTURE_ATTEMPT   => $invoice->getLastCaptureAttempt(),
-                    I::FIELD_SUB_TOTAL              => $invoice->getSubTotal(),
-                    I::FIELD_CREDIT                 => $invoice->getCredit(),
-                    I::FIELD_TAX_1                  => $invoice->getTax(),
-                    I::FIELD_TAX_2                  => $invoice->getTax2(),
-                    I::FIELD_TOTAL                  => $invoice->getTotal(),
-                    I::FIELD_TAX_RATE_1             => $invoice->getTaxRate(),
-                    I::FIELD_TAX_RATE_2             => $invoice->getTaxRate2(),
-                    I::FIELD_STATUS                 => $invoice->getStatus(),
-                    I::FIELD_PAYMENT_METHOD         => $invoice->getPaymentMethod(),
-                    I::FIELD_PAYMENT_METHOD_ID      => $invoice->getPaymentMethodId(),
-                    I::FIELD_NOTES                  => $invoice->getNotes(),
+                    I::FIELD_INVOICE_NUM            => $invoice->invoiceNumber,
+                    I::FIELD_DATE                   => $invoice->date,
+                    I::FIELD_DUE_DATE               => $invoice->dueDate,
+                    I::FIELD_DATE_PAID              => $invoice->datePaid,
+                    I::FIELD_LAST_CAPTURE_ATTEMPT   => $invoice->lastCaptureAttempt,
+                    I::FIELD_SUB_TOTAL              => $invoice->subTotal,
+                    I::FIELD_CREDIT                 => $invoice->credit,
+                    I::FIELD_TAX_1                  => $invoice->tax,
+                    I::FIELD_TAX_2                  => $invoice->tax2,
+                    I::FIELD_TOTAL                  => $invoice->total,
+                    I::FIELD_TAX_RATE_1             => $invoice->taxRate,
+                    I::FIELD_TAX_RATE_2             => $invoice->taxRate2,
+                    I::FIELD_STATUS                 => $invoice->status,
+                    I::FIELD_PAYMENT_METHOD         => $invoice->paymentMethod,
+                    I::FIELD_PAYMENT_METHOD_ID      => $invoice->paymentMethodId,
+                    I::FIELD_NOTES                  => $invoice->notes,
                 ]
             );
     }
 
     /**
-     * @param array $results
-     *
      * @throws Exception
      *
      * @return I[]

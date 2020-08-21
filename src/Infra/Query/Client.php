@@ -25,11 +25,7 @@ use IronLions\WHMCS\Infra\AbstractQuery;
 final class Client extends AbstractQuery implements ClientRepositoryInterface
 {
     /**
-     * @param int $id
-     *
      * @throws Exception
-     *
-     * @return C
      */
     public function getOneById(int $id): C
     {
@@ -51,67 +47,65 @@ final class Client extends AbstractQuery implements ClientRepositoryInterface
             ->where(C::FIELD_ID, '=', $client->getId())
             ->update(
                 [
-                    C::FIELD_FIRST_NAME               => $client->getFirstname(),
-                    C::FIELD_LAST_NAME                => $client->getLastname(),
-                    C::FIELD_COMPANY_NAME             => $client->getCompanyName(),
-                    C::FIELD_EMAIL                    => $client->getEmail(),
-                    C::FIELD_ADDRESS_1                => $client->getAddress1(),
-                    C::FIELD_ADDRESS_2                => $client->getAddress2(),
-                    C::FIELD_CITY                     => $client->getCity(),
-                    C::FIELD_STATE                    => $client->getState(),
-                    C::FIELD_POST_CODE                => $client->getPostCode(),
-                    C::FIELD_COUNTRY                  => $client->getCountry(),
-                    C::FIELD_PHONE_NUMBER             => $client->getPhoneNumber(),
-                    C::FIELD_TAX_ID                   => $client->getTaxId(),
-                    C::FIELD_PASSWORD                 => $client->getPassword(),
-                    C::FIELD_AUTH                     => $client->getAuthModule(),
-                    C::FIELD_AUTH_DATA                => $client->getAuthData(),
-                    C::FIELD_CURRENCY                 => $client->getCurrency(),
-                    C::FIELD_DEFAULT_GATEWAY          => $client->getDefaultGateway(),
-                    C::FIELD_CREDIT                   => $client->getCredit(),
-                    C::FIELD_TAX_EXEMPT               => $client->isTaxExempt(),
-                    C::FIELD_LATE_FEE_OVERRIDE        => $client->isLateFeeOverride(),
-                    C::FIELD_DUE_NOTICES_OVERRIDE     => $client->isDueNoticesOverride(),
-                    C::FIELD_SEPARATE_INVOICES        => $client->isSeparateInvoices(),
-                    C::FIELD_DISABLE_AUTO_CC          => $client->isDisableAutoCC(),
-                    C::FIELD_DATE_CREATED             => $client->getCreated(),
-                    C::FIELD_NOTES                    => $client->getNotes(),
-                    C::FIELD_BILLING_CID              => $client->getBillingCid(),
-                    C::FIELD_SECURITY_QUESTION_ID     => $client->getSecurityQid(),
-                    C::FIELD_SECURITY_QUESTION_ANSWER => $client->getSecurityQuestionAnswer(),
-                    C::FIELD_GROUP_ID                 => $client->getGroupId(),
-                    C::FIELD_CARD_TYPE                => $client->getCardType(),
-                    C::FIELD_CARD_LAST_FOUR           => $client->getCardLastFour(),
-                    C::FIELD_CARD_NUM                 => $client->getCardNumber(),
-                    C::FIELD_CARD_START_DATE          => $client->getStartDate(),
-                    C::FIELD_CARD_EXPIRY_DATE         => $client->getExpDate(),
-                    C::FIELD_ISSUE_NUMBER             => $client->getIssueNumber(),
-                    C::FIELD_BANK_NAME                => $client->getBankName(),
-                    C::FIELD_BANK_TYPE                => $client->getBankType(),
-                    C::FIELD_BANK_CODE                => $client->getBankCode(),
-                    C::FIELD_BANK_ACCOUNT             => $client->getBankAcct(),
-                    C::FIELD_GATEWAY_ID               => $client->getGatewayId(),
-                    C::FIELD_LAST_LOGIN               => $client->getLastLogin(),
-                    C::FIELD_IP                       => $client->getIp(),
-                    C::FIELD_HOST                     => $client->getHost(),
-                    C::FIELD_STATUS                   => (string) $client->getStatus(),
-                    C::FIELD_LANGUAGE                 => $client->getLanguage(),
-                    C::FIELD_PW_RESET_KEY             => $client->getPwResetKey(),
-                    C::FIELD_EMAIL_OPT_OUT            => $client->isEmailOptOut(),
-                    C::FIELD_EMAIL_MARKETING_OPT_IN   => $client->isMarketingEmailsOptIn(),
-                    C::FIELD_AUTO_CLOSE_OVERRIDE      => $client->isAutoCloseOverride(),
-                    C::FIELD_ALLOW_SSO                => $client->isAllowSSO(),
-                    C::FIELD_EMAIL_VERIFIED           => $client->isEmailVerified(),
-                    C::FIELD_CREATED_AT               => $client->getCreated(),
-                    C::FIELD_UPDATED_AT               => $client->getUpdated(),
-                    C::FIELD_PW_RESET_EXPIRY          => $client->getPwResetKeyExpire(),
+                    C::FIELD_FIRST_NAME               => $client->firstname,
+                    C::FIELD_LAST_NAME                => $client->lastname,
+                    C::FIELD_COMPANY_NAME             => $client->companyName,
+                    C::FIELD_EMAIL                    => $client->email,
+                    C::FIELD_ADDRESS_1                => $client->address1,
+                    C::FIELD_ADDRESS_2                => $client->address2,
+                    C::FIELD_CITY                     => $client->city,
+                    C::FIELD_STATE                    => $client->state,
+                    C::FIELD_POST_CODE                => $client->postCode,
+                    C::FIELD_COUNTRY                  => $client->country,
+                    C::FIELD_PHONE_NUMBER             => $client->phoneNumber,
+                    C::FIELD_TAX_ID                   => $client->taxId,
+                    C::FIELD_PASSWORD                 => $client->password,
+                    C::FIELD_AUTH                     => $client->authModule,
+                    C::FIELD_AUTH_DATA                => $client->authData,
+                    C::FIELD_CURRENCY                 => $client->currency,
+                    C::FIELD_DEFAULT_GATEWAY          => $client->defaultGateway,
+                    C::FIELD_CREDIT                   => $client->credit,
+                    C::FIELD_TAX_EXEMPT               => $client->taxExempt,
+                    C::FIELD_LATE_FEE_OVERRIDE        => $client->lateFeeOverride,
+                    C::FIELD_DUE_NOTICES_OVERRIDE     => $client->dueNoticesOverride,
+                    C::FIELD_SEPARATE_INVOICES        => $client->separateInvoices,
+                    C::FIELD_DISABLE_AUTO_CC          => $client->disableAutoCC,
+                    C::FIELD_DATE_CREATED             => $client->created,
+                    C::FIELD_NOTES                    => $client->notes,
+                    C::FIELD_BILLING_CID              => $client->billingCid,
+                    C::FIELD_SECURITY_QUESTION_ID     => $client->securityQid,
+                    C::FIELD_SECURITY_QUESTION_ANSWER => $client->securityQuestionAnswer,
+                    C::FIELD_GROUP_ID                 => $client->groupId,
+                    C::FIELD_CARD_TYPE                => $client->cardType,
+                    C::FIELD_CARD_LAST_FOUR           => $client->cardLastFour,
+                    C::FIELD_CARD_NUM                 => $client->cardNumber,
+                    C::FIELD_CARD_START_DATE          => $client->startDate,
+                    C::FIELD_CARD_EXPIRY_DATE         => $client->expDate,
+                    C::FIELD_ISSUE_NUMBER             => $client->issueNumber,
+                    C::FIELD_BANK_NAME                => $client->bankName,
+                    C::FIELD_BANK_TYPE                => $client->bankType,
+                    C::FIELD_BANK_CODE                => $client->bankCode,
+                    C::FIELD_BANK_ACCOUNT             => $client->bankAcct,
+                    C::FIELD_GATEWAY_ID               => $client->gatewayId,
+                    C::FIELD_LAST_LOGIN               => $client->lastLogin,
+                    C::FIELD_IP                       => $client->ip,
+                    C::FIELD_HOST                     => $client->host,
+                    C::FIELD_STATUS                   => (string) $client->status,
+                    C::FIELD_LANGUAGE                 => $client->language,
+                    C::FIELD_PW_RESET_KEY             => $client->pwResetKey,
+                    C::FIELD_EMAIL_OPT_OUT            => $client->emailOptOut,
+                    C::FIELD_EMAIL_MARKETING_OPT_IN   => $client->marketingEmailsOptIn,
+                    C::FIELD_AUTO_CLOSE_OVERRIDE      => $client->autoCloseOverride,
+                    C::FIELD_ALLOW_SSO                => $client->allowSSO,
+                    C::FIELD_EMAIL_VERIFIED           => $client->emailVerified,
+                    C::FIELD_CREATED_AT               => $client->created,
+                    C::FIELD_UPDATED_AT               => $client->updated,
+                    C::FIELD_PW_RESET_EXPIRY          => $client->pwResetKeyExpire,
                 ]
             );
     }
 
     /**
-     * @param array $results
-     *
      * @throws Exception
      *
      * @return C[]

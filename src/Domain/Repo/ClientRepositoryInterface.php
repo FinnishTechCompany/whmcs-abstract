@@ -18,15 +18,7 @@ use IronLions\WHMCS\Domain\Client;
 
 interface ClientRepositoryInterface
 {
-    /**
-     * @param int $id
-     *
-     * @return Client
-     */
     public function getOneById(int $id): Client;
 
-    /**
-     * @param Client $client
-     */
     public function update(Client $client): void;
 }

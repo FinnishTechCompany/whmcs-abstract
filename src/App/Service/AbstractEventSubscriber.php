@@ -25,8 +25,6 @@ abstract class AbstractEventSubscriber
      *          'AcceptQuote'   => [static::class, 'onAcceptQuote'],
      *      ];
      * ```.
-     *
-     * @return array
      */
     abstract public static function subscribe(): array;
 }

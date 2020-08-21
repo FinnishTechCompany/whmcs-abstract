@@ -19,27 +19,18 @@ use IronLions\WHMCS\Domain\Core\Variables;
 
 abstract class AbstractController
 {
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Request $request;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
-    /**
-     * @return array
-     */
     protected function getVariables(): array
     {
         return $this->request->getVars();
     }
 
-    /**
-     * @return Variables
-     */
     protected function getModule(): Variables
     {
         $_module = $this->getVariables();

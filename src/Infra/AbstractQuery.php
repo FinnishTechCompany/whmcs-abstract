@@ -14,7 +14,25 @@ declare(strict_types=1);
 
 namespace IronLions\WHMCS\Infra;
 
+use IronLions\WHMCS\App\Service\EntityManager as em;
+
 abstract class AbstractQuery
 {
     protected const TBL_GATEWAYS = 'tblpaymentgateways';
+
+    protected function _getOneBy($id, string $column, string $table): array
+    {
+        return em::_table($table)
+            ->where($column, '=', $id)
+            ->limit(1)
+            ->get()
+            ->toArray();
+    }
+
+    protected function _update($id, string $column, string $table, array $map): void
+    {
+        em::_table($table)
+            ->where($column, '=', $id)
+            ->update($map);
+    }
 }
