@@ -30,10 +30,20 @@ final class Group extends AbstractQuery implements GroupRepositoryInterface
 
     public function update(I $group): void
     {
-        $this->_update($group->getId(), I::FIELD_ID, I::TABLE, [
+        $this->_update($group->getId(), I::FIELD_ID, I::TABLE, self::getMap($group));
+    }
+
+    public function create(I $group): I
+    {
+        return $this->getOneById($this->_insert(I::TABLE, self::getMap($group)));
+    }
+
+    private static function getMap(I $group): array
+    {
+        return [
             I::FIELD_NAME        => $group->name,
             I::FIELD_DESCRIPTION => $group->description,
-        ]);
+        ];
     }
 
     /**

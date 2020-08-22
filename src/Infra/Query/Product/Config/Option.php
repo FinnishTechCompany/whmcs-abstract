@@ -12,17 +12,47 @@
 
 namespace IronLions\WHMCS\Infra\Query\Product\Config;
 
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
+use IronLions\WHMCS\Domain\Exception\InsertFailedException;
 use IronLions\WHMCS\Domain\Product\Config\Option as I;
 use IronLions\WHMCS\Domain\Repo\Product\Config\OptionRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
 final class Option extends AbstractQuery implements OptionRepositoryInterface
 {
+    public function create(I $option): I
+    {
+        $res = $this->_insert(
+            I::TABLE,
+            [
+                I::FIELD_GROUP_ID    => $option->groupId,
+                I::FIELD_OPTION_NAME => $option->optionName,
+                I::FIELD_OPTION_TYPE => $option->optionType,
+                I::FIELD_QTY_MINIMUM => $option->qtyMinimum,
+                I::FIELD_QTY_MAXIMUM => $option->qtyMaximum,
+                I::FIELD_ORDER       => $option->order,
+                I::FIELD_HIDDEN      => $option->hidden,
+            ]
+        );
+
+        try {
+            return $this->getOneById($res);
+        } catch (EntityNotFoundException $e) {
+            throw new InsertFailedException();
+        }
+    }
+
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getOneById(int $id): I
     {
         return $this->mapEntity($this->_getBy($id, I::FIELD_ID, I::TABLE, 1))[0];
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getByGroup(int $gid): array
     {
         return $this->mapEntity($this->_getBy($gid, I::FIELD_GROUP_ID, I::TABLE));

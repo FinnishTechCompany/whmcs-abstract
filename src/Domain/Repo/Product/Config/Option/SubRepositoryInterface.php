@@ -12,30 +12,30 @@ declare(strict_types=1);
  *
  */
 
-namespace IronLions\WHMCS\Domain\Repo\Product\Config;
+namespace IronLions\WHMCS\Domain\Repo\Product\Config\Option;
 
 use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
 use IronLions\WHMCS\Domain\Exception\InsertFailedException;
-use IronLions\WHMCS\Domain\Product\Config\Option;
+use IronLions\WHMCS\Domain\Product\Config\Option\Sub as I;
 
-interface OptionRepositoryInterface
+interface SubRepositoryInterface
 {
     /**
      * @throws EntityNotFoundException
      */
-    public function getOneById(int $id): Option;
+    public function getOneById(int $id): I;
 
     /**
      * @throws EntityNotFoundException
      *
-     * @return Option[]
+     * @return I[]
      */
-    public function getByGroup(int $gid): array;
+    public function getByConfigId(int $id): array;
 
-    public function update(Option $option): void;
+    public function update(I $sub): void;
 
     /**
      * @throws InsertFailedException
      */
-    public function create(Option $option): Option;
+    public function create(I $sub): I;
 }

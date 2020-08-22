@@ -15,18 +15,30 @@ declare(strict_types=1);
 namespace IronLions\WHMCS\Infra;
 
 use IronLions\WHMCS\App\Service\EntityManager as em;
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
 
 abstract class AbstractQuery
 {
     protected const TBL_GATEWAYS = 'tblpaymentgateways';
 
-    protected function _getBy($id, string $column, string $table, int $limit = 0): array
+    /**
+     * @param mixed $id
+     *
+     * @throws EntityNotFoundException
+     */
+    protected function _getBy($id, string $column, string $table, int $limit = -1): array
     {
-        return em::_table($table)
+        $arr = em::_table($table)
             ->where($column, '=', $id)
             ->limit($limit)
             ->get()
             ->toArray();
+
+        if ([] === $arr) {
+            throw new EntityNotFoundException();
+        }
+
+        return $arr;
     }
 
     protected function _update($id, string $column, string $table, array $map): void
@@ -34,5 +46,11 @@ abstract class AbstractQuery
         em::_table($table)
             ->where($column, '=', $id)
             ->update($map);
+    }
+
+    protected function _insert(string $table, array $values): int
+    {
+        return em::_table($table)
+            ->insertGetId($values);
     }
 }

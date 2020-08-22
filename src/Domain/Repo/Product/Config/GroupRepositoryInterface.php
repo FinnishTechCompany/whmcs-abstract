@@ -14,13 +14,26 @@ declare(strict_types=1);
 
 namespace IronLions\WHMCS\Domain\Repo\Product\Config;
 
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
+use IronLions\WHMCS\Domain\Exception\InsertFailedException;
 use IronLions\WHMCS\Domain\Product\Config\Group;
 
 interface GroupRepositoryInterface
 {
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getOneById(int $id): Group;
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getOneByName(string $name): Group;
 
     public function update(Group $group): void;
+
+    /**
+     * @throws InsertFailedException
+     */
+    public function create(Group $group): Group;
 }
