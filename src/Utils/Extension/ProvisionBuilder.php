@@ -26,6 +26,7 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
     private array $required =
     [
         'withTestConnection' => false,
+        'withCreateAccount'  => false,
     ];
 
     public function __construct(ExtensionBuilder $builder)
@@ -46,7 +47,7 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             ."'RequiresServer' => $requiresServer,"
             ."'DefaultSSLPort' => '$defaultSSLPort'"
             .'];';
-        $this->builder->addFunction('MetaData', $code, 'array');
+        $this->builder->__func('MetaData', $code, 'array');
 
         return $this;
     }
@@ -61,7 +62,18 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
      */
     public function __addConfigOptions(array $options): void
     {
+        /**
+         * case FieldBuilder::VALUE_COMMAND:
+         * $stamp = HandledStamp::class;
+         * $bus = "return \$kernel->bus(new $field[value]())->last($stamp::class)->getResult();\n";
+         * $kernel = PHP_EOL.ExtensionBuilder::KERNEL;
+         * #$code .= "function() { $kernel\n $bus },\n";
+         * $code .= "'',\n";.
+         *
+         * break;
+         */
         $kernel = false;
+        $stamp = HandledStamp::class;
         $code = "\nreturn [\n";
         foreach ($options as $optionName => $option) {
             $code .= "'$optionName' => [\n";
@@ -71,8 +83,12 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
                 switch ($field['type']) {
                     case FieldBuilder::VALUE_COMMAND:
                         $kernel = true;
-                        $stamp = HandledStamp::class;
                         $code .= "\$kernel->bus(new $field[value]())->last($stamp::class)->getResult(),\n";
+
+                        break;
+                    case FieldBuilder::VALUE_LOADER:
+                        $kernel = true;
+                        $code .= "function() use (\$kernel) { return \$kernel->bus(new $field[value]())->last($stamp::class)->getResult(); },\n";
 
                         break;
                     case FieldBuilder::VALUE_STRING:
@@ -96,10 +112,10 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         $code .= '];';
 
         if ($kernel) {
-            $code = PHP_EOL.ExtensionBuilder::KERNEL.$code;
+            $code = $kernel = PHP_EOL.ExtensionBuilder::KERNEL.PHP_EOL.$code;
         }
 
-        $this->builder->addFunction('ConfigOptions', $code, 'array');
+        $this->builder->__func('ConfigOptions', $code, 'array');
     }
 
     /**
@@ -120,7 +136,7 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
     public function withTestConnection(array $entrypoint): self
     {
         $this->required[__FUNCTION__] = true;
-        $this->builder->addEntrypointFunction(
+        $this->builder->__entryFunc(
             'TestConnection',
             $entrypoint,
             'array',
@@ -132,11 +148,36 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         return $this;
     }
 
+    /**
+     * Provision a new instance of a product/service.
+     *
+     * Attempt to provision a new instance of a given product/service. This is
+     * called any time provisioning is requested inside of WHMCS. Depending upon the
+     * configuration, this can be any of:
+     * * When a new order is placed
+     * * When an invoice for a new order is paid
+     * * Upon manual request by an admin user
+     */
+    public function withCreateAccount(array $entrypoint): self
+    {
+        $this->required[__FUNCTION__] = true;
+        $this->builder->__entryFunc(
+            'CreateAccount',
+            $entrypoint,
+            'string',
+            'array $params',
+            'IronLions\WHMCS\Domain\Params\Provisioning\ModuleParameters',
+            self::LOG
+        );
+
+        return $this;
+    }
+
     public function apply(): ExtensionBuilder
     {
         foreach ($this->required as $name => $bool) {
             if (false === $bool) {
-                throw new \LogicException("You must call $name first!");
+                throw new \LogicException("You must call $name!");
             }
         }
 

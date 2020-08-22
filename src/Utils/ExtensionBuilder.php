@@ -40,12 +40,17 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
         $this->code = '';
     }
 
+    public function withHooks(): HookBuilder
+    {
+        return new HookBuilder($this);
+    }
+
     public function withProvision(): ProvisionBuilder
     {
         return new ProvisionBuilder($this);
     }
 
-    public function addFunction(
+    public function __func(
         string $name,
         string $code,
         string $returnType = 'void',
@@ -60,9 +65,9 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
     /**
      * @param ExtensionEntrypointInterface[] $entrypoint
      *
-     * @return $this
+     * @internal
      */
-    public function addEntrypointFunction(
+    public function __entryFunc(
         string $name,
         array $entrypoint,
         string $returnType,
@@ -78,11 +83,14 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
         }
         $code .= "\n  return ".('string' === $returnType ? "'success';" : "['success'=>true,'error'=>''];");
         $code = sprintf($this->getDefaultTryCatchCode($logCategory, 'string' === $returnType), $code);
-        $this->addFunction($name, $code, $returnType, $params);
+        $this->__func($name, $code, $returnType, $params);
 
         return $this;
     }
 
+    /**
+     * @internal
+     */
     public function getDefaultTryCatchCode(string $type, bool $simple): string
     {
         return "try {\n %s\n } catch (\Throwable \$e) {\n"
@@ -91,6 +99,17 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
                 ? "  return \$e->getMessage();\n"
                 : "  return ['success'=>false,'error'=>\$e->getMessage()];\n")
             .' }';
+    }
+
+    /**
+     * @internal
+     */
+    public function __addCode(string $code): self
+    {
+        $this->throwIfNotAllowed();
+        $this->code .= $code;
+
+        return $this;
     }
 
     public function __debug(): string

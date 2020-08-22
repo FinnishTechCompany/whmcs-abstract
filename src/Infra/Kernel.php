@@ -95,9 +95,18 @@ final class Kernel
     private function busMiddlewares(): array
     {
         $handlers = [];
-        foreach (self::$busConfig as $command) {
-            foreach (self::$cb->findTaggedServiceIds($command) as $handler => $data) {
-                $handlers[$command][] = self::$cb->get($handler);
+        foreach (self::$cb->findTaggedServiceIds('app.bus') as $handler => $data) {
+            if (empty($data[0])) {
+                // Use default handler.
+                if ('Handler' === !substr($handler, -7)) {
+                    throw new \LogicException('Handler naming is invalid for automatic mapping. Please specify command manually.');
+                }
+                $handlers[substr($handler, 0, -7).'Command'][] = self::$cb->get($handler);
+            } else {
+                // Override handlers.
+                foreach ($data[0] as $command) {
+                    $handlers[$command][] = self::$cb->get($handler);
+                }
             }
         }
 
@@ -114,10 +123,5 @@ final class Kernel
     public static function __cb(): ContainerBuilder
     {
         return self::$cb;
-    }
-
-    public static function addCommands(array $bus): void
-    {
-        self::$busConfig = array_merge($bus, self::$busConfig);
     }
 }

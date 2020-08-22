@@ -26,6 +26,7 @@ abstract class FieldBuilder
     public const VALUE_BOOL = 'bool';
     public const VALUE_INT = 'int';
     public const VALUE_ARRAY = 'array';
+    public const VALUE_LOADER = 'loader';
 
     protected object $builder;
     protected string $name;
@@ -119,10 +120,28 @@ abstract class FieldBuilder
         return $this;
     }
 
-    public function optionsFromCommand(string $command): self
+    public function optionsViaCommand(string $command): self
     {
         unset($this->required[__FUNCTION__]);
         $this->fields['Options'] = $this->value(self::VALUE_COMMAND, $command);
+
+        return $this;
+    }
+
+    public function simple(): self
+    {
+        $this->fields['SimpleMode'] = $this->value(self::VALUE_BOOL, true);
+
+        return $this;
+    }
+
+    public function loader(string $command): self
+    {
+        if (!isset($this->fields['SimpleMode'])) {
+            throw new \LogicException('You cannot use loader without using `simple`.');
+        }
+
+        $this->fields['Loader'] = $this->value(self::VALUE_LOADER, $command);
 
         return $this;
     }
