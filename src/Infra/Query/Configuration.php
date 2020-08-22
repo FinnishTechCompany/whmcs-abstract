@@ -26,7 +26,7 @@ final class Configuration extends AbstractQuery implements ConfigurationReposito
      */
     public function getOneById(int $id): I
     {
-        return $this->mapEntity($this->_getOneBy($id, I::FIELD_ID, I::TABLE))[0];
+        return $this->mapEntity($this->_getBy($id, I::FIELD_ID, I::TABLE, 1))[0];
     }
 
     /**
@@ -34,7 +34,7 @@ final class Configuration extends AbstractQuery implements ConfigurationReposito
      */
     public function getOneBySetting(string $setting): I
     {
-        return $this->mapEntity($this->_getOneBy($setting, I::FIELD_SETTING, I::TABLE))[0];
+        return $this->mapEntity($this->_getBy($setting, I::FIELD_SETTING, I::TABLE, 1))[0];
     }
 
     /**

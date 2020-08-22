@@ -20,11 +20,11 @@ abstract class AbstractQuery
 {
     protected const TBL_GATEWAYS = 'tblpaymentgateways';
 
-    protected function _getOneBy($id, string $column, string $table): array
+    protected function _getBy($id, string $column, string $table, int $limit = 0): array
     {
         return em::_table($table)
             ->where($column, '=', $id)
-            ->limit(1)
+            ->limit($limit)
             ->get()
             ->toArray();
     }

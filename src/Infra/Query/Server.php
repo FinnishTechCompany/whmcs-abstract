@@ -27,7 +27,7 @@ final class Server extends AbstractQuery implements ServerRepositoryInterface
      */
     public function getOneById(int $id): I
     {
-        $r = $this->mapEntity($this->_getOneBy($id, I::FIELD_ID, I::TABLE))[0];
+        $r = $this->mapEntity($this->_getBy($id, I::FIELD_ID, I::TABLE, 1))[0];
         if (null === $r) {
             throw new EntityNotFoundException();
         }
@@ -40,7 +40,7 @@ final class Server extends AbstractQuery implements ServerRepositoryInterface
      */
     public function getOneByType(string $type): I
     {
-        $r = $this->mapEntity($this->_getOneBy($type, I::FIELD_TYPE, I::TABLE))[0];
+        $r = $this->mapEntity($this->_getBy($type, I::FIELD_TYPE, I::TABLE, 1))[0];
         if (null === $r) {
             throw new EntityNotFoundException();
         }

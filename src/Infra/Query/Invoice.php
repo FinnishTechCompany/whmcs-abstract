@@ -20,6 +20,7 @@ use IronLions\WHMCS\App\Service\EntityManager as em;
 use IronLions\WHMCS\Domain\Invoice as I;
 use IronLions\WHMCS\Domain\Repo\InvoiceRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
+use IronLions\WHMCS\Infra\Query\Invoice\Items;
 
 final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
 {
@@ -93,7 +94,7 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
                 (string) $result->{I::FIELD_PAYMENT_METHOD},
                 (int) $result->{I::FIELD_PAYMENT_METHOD_ID},
                 (string) $result->{I::FIELD_NOTES},
-                em::invoiceItems()->getForInvoice($result->{I::FIELD_ID})
+                (new Items())->getForInvoice($result->{I::FIELD_ID})
             );
         }
 
