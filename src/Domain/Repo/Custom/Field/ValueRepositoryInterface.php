@@ -30,5 +30,10 @@ interface ValueRepositoryInterface
      */
     public function getByFieldId(Field $field): array;
 
+    /**
+     * @return I[]
+     */
+    public function getByRefId(int $id): array;
+
     public function update(I $value): void;
 }

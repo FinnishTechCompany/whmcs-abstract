@@ -33,6 +33,11 @@ final class Value extends AbstractQuery implements ValueRepositoryInterface
         return $this->mapEntity($this->_getBy($field->getId(), I::FIELD_ID, I::TABLE));
     }
 
+    public function getByRefId(int $id): array
+    {
+        return $this->mapEntity($this->_getBy($id, I::FIELD_REL_ID, I::TABLE));
+    }
+
     /**
      * @param I $value
      */

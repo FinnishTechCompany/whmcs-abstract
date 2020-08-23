@@ -81,7 +81,7 @@ final class Field extends AbstractQuery implements FieldRepositoryInterface
                 (string) $result->{I::FIELD_REQUIRED},
                 (string) $result->{I::FIELD_SHOW_ORDER},
                 (string) $result->{I::FIELD_SHOW_INVOICE},
-                (string) $result->{I::FIELD_SORT_ORDER},
+                (int) $result->{I::FIELD_SORT_ORDER},
                 new DateTimeImmutable($result->{I::FIELD_CREATED_AT}),
                 new DateTimeImmutable($result->{I::FIELD_UPDATED_AT}),
             );
