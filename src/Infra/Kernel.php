@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -159,8 +158,10 @@ final class Kernel
     {
         $locator = new FileLocator();
         $loader = new PhpFileLoader($locator);
+        $reader = new AnnotationReader();
+        $reader->addGlobalIgnoredName('required');
         $resolver = new LoaderResolver([
-            new AnnotationDirectoryLoader($locator, new AnnotatedRouteControllerLoader(new AnnotationReader())),
+            new AnnotationDirectoryLoader($locator, new AnnotatedRouteControllerLoader($reader)),
         ]);
         $loader->setResolver($resolver);
 

@@ -19,7 +19,7 @@ use Illuminate\Database\Query\Builder;
 use WHMCS\Database\Capsule;
 
 /**
- * Class EntityManager.
+ * @deprecated
  */
 class EntityManager
 {

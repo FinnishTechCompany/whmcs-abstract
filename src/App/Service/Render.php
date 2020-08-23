@@ -16,6 +16,9 @@ namespace IronLions\WHMCS\App\Service;
 
 use IronLions\WHMCS\Domain\Core\Variables;
 
+/**
+ * @deprecated
+ */
 final class Render
 {
     private string $file;

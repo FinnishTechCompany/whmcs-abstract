@@ -18,6 +18,9 @@ use IronLions\WHMCS\Domain\Core\Route;
 use IronLions\WHMCS\Domain\Exception\Http\NamedRouteNotConfiguredException;
 use IronLions\WHMCS\Domain\Exception\Http\RouteNotFoundException;
 
+/**
+ * @deprecated
+ */
 final class Router
 {
     private static array $routes = [];

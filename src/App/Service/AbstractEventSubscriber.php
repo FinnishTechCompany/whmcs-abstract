@@ -12,6 +12,9 @@
 
 namespace IronLions\WHMCS\App\Service;
 
+/**
+ * @deprecated
+ */
 abstract class AbstractEventSubscriber
 {
     /**

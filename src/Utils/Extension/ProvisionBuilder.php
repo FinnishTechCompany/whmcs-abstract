@@ -221,11 +221,19 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         return $this;
     }
 
-    public function withClientArea(): self
+    public function withClientArea(bool $fullOverride, string $defaultTemplate = 'templates/default.tpl'): self
     {
-        $code = '\n'
-            ."\$requestedAction = isset(\$_REQUEST['customAction']) ? \$_REQUEST['customAction'] : '';"
-            .'';
+        $template = $fullOverride ? 'tabOverviewReplacementTemplate' : 'tabOverviewModuleOutputTemplate';
+
+        $code = PHP_EOL.'  '.ExtensionBuilder::KERNEL.PHP_EOL
+            ."  \$res = \$kernel->handle();\n"
+            ."  \$kernel->terminate();\n"
+            ."\n  return [\n"
+            ."    '$template' => '$defaultTemplate',\n"
+            ."    'templateVariables' => [\n"
+            ."      'abstractContent' => \$res->getContent(),\n"
+            ."    ],\n"
+            .'  ];';
 
         $this->builder->__func(
             'ClientArea',
