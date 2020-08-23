@@ -51,6 +51,11 @@ class Value extends AbstractQuery implements ValueRepositoryInterface
         );
     }
 
+    public function create(I $value): int
+    {
+        return $this->_insert(I::TABLE, self::getMap($value));
+    }
+
     protected static function getMap(I $field): array
     {
         return [

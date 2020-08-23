@@ -28,23 +28,23 @@ final class Value
     public int $fieldId;
     public int $relId;
     public string $value;
-    public DateTimeImmutable $created_at;
-    public DateTimeImmutable $updated_at;
+    public DateTimeImmutable $createdAt;
+    public DateTimeImmutable $updatedAt;
 
     public function __construct(
         int $id,
         int $fieldId,
         int $relId,
         string $value,
-        DateTimeImmutable $created_at,
-        DateTimeImmutable $updated_at
+        DateTimeImmutable $createdAt,
+        DateTimeImmutable $updatedAt
     ) {
         $this->id = $id;
         $this->fieldId = $fieldId;
         $this->relId = $relId;
         $this->value = $value;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 
     public function getId(): int

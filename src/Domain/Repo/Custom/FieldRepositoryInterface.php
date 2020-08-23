@@ -24,5 +24,10 @@ interface FieldRepositoryInterface
      */
     public function getOneById(int $id): I;
 
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function getOneByFieldName(string $name): I;
+
     public function update(I $field): void;
 }

@@ -16,7 +16,9 @@ namespace IronLions\WHMCS\Infra\Query\Custom;
 
 use DateTimeImmutable;
 use Exception;
+use IronLions\WHMCS\App\Service\EntityManager as em;
 use IronLions\WHMCS\Domain\Custom\Field as I;
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
 use IronLions\WHMCS\Domain\Repo\Custom\FieldRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
@@ -25,6 +27,21 @@ class Field extends AbstractQuery implements FieldRepositoryInterface
     public function getOneById(int $id): I
     {
         return $this->mapEntity($this->_getBy($id, I::FIELD_ID, I::TABLE, 1))[0];
+    }
+
+    public function getOneByFieldName(string $name): I
+    {
+        $arr = em::_table(I::TABLE)
+            ->whereRaw('FIND_IN_SET(?, REPLACE('.I::FIELD_FIELD_NAME.", '|', ','))", [$name])
+            ->limit(1)
+            ->get()
+            ->toArray();
+
+        if ([] === $arr) {
+            throw new EntityNotFoundException();
+        }
+
+        return $this->mapEntity($arr)[0];
     }
 
     /**

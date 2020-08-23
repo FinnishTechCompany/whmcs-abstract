@@ -36,4 +36,9 @@ interface ValueRepositoryInterface
     public function getByRefId(int $id): array;
 
     public function update(I $value): void;
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function create(I $value): int;
 }
