@@ -26,4 +26,9 @@ final class ControllerResolver extends \Symfony\Component\HttpKernel\Controller\
 
         return $controller;
     }
+
+    protected function instantiateController(string $class)
+    {
+        return Kernel::__cb()->get($class);
+    }
 }

@@ -25,6 +25,10 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
     private const PARAMS_CLASS = 'IronLions\WHMCS\Domain\Params\Provisioning\ModuleParameters';
 
     private ExtensionBuilder $builder;
+    private array $customButtons = [
+        'client' => [],
+        'admin'  => [],
+    ];
     private array $required =
     [
         'withTestConnection'   => false,
@@ -55,70 +59,17 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         return $this;
     }
 
+    /**
+     * Define product configuration options.
+     *
+     * The values you return here define the configuration options that are
+     * presented to a user when configuring a product for use with the module. These
+     * values are then made available in all module function calls with the key name
+     * configoptionX - with X being the index number of the field from 1 to 24.
+     */
     public function withConfigOptions(): ConfigOptionsBuilder
     {
         return new ConfigOptionsBuilder($this);
-    }
-
-    /**
-     * @internal
-     */
-    public function __addConfigOptions(array $options): void
-    {
-        /**
-         * case FieldBuilder::VALUE_COMMAND:
-         * $stamp = HandledStamp::class;
-         * $bus = "return \$kernel->bus(new $field[value]())->last($stamp::class)->getResult();\n";
-         * $kernel = PHP_EOL.ExtensionBuilder::KERNEL;
-         * #$code .= "function() { $kernel\n $bus },\n";
-         * $code .= "'',\n";.
-         *
-         * break;
-         */
-        $kernel = false;
-        $stamp = HandledStamp::class;
-        $code = "\nreturn [\n";
-        foreach ($options as $optionName => $option) {
-            $code .= "'$optionName' => [\n";
-            foreach ($option as $fieldName => $field) {
-                $code .= " '$fieldName' => ";
-
-                switch ($field['type']) {
-                    case FieldBuilder::VALUE_COMMAND:
-                        $kernel = true;
-                        $code .= "\$kernel->bus(new $field[value]())->last($stamp::class)->getResult(),\n";
-
-                        break;
-                    case FieldBuilder::VALUE_LOADER:
-                        $kernel = true;
-                        $code .= "function() use (\$kernel) { return \$kernel->bus(new $field[value]())->last($stamp::class)->getResult(); },\n";
-
-                        break;
-                    case FieldBuilder::VALUE_STRING:
-                        $code .= "'$field[value]',\n";
-
-                        break;
-                    case FieldBuilder::VALUE_INT:
-                        $code .= "$field[value],\n";
-
-                        break;
-                    case FieldBuilder::VALUE_BOOL:
-                        $code .= ($field['value'] ? 'true' : 'false').",\n";
-
-                        break;
-                    case FieldBuilder::VALUE_ARRAY:
-                        $code .= var_export($field['value'], true).",\n";
-                }
-            }
-            $code .= " ],\n";
-        }
-        $code .= '];';
-
-        if ($kernel) {
-            $code = $kernel = PHP_EOL.ExtensionBuilder::KERNEL.PHP_EOL.$code;
-        }
-
-        $this->builder->__func('ConfigOptions', $code, 'array');
     }
 
     /**
@@ -221,6 +172,64 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         return $this;
     }
 
+    /**
+     * Custom function for performing an additional action.
+     *
+     * You can define an unlimited number of custom functions in this way.
+     *
+     * Similar to all other module call functions, they should either return
+     * 'success' or an error message to be displayed.
+     */
+    public function withCustomAction(string $slug, string $name, array $entrypoint, bool $admin, bool $client): self
+    {
+        $this->builder->__entryFunc(
+            $slug,
+            $entrypoint,
+            'string',
+            self::PARAMS,
+            self::PARAMS_CLASS,
+            self::LOG
+        );
+
+        if ($admin) {
+            $this->customButtons['admin'][$name] = $slug;
+        }
+
+        if ($client) {
+            $this->customButtons['client'][$name] = $slug;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add new page to the product page.
+     * This will be handled by your controller.
+     */
+    public function withCustomPage(string $name, string $slug, string $template = 'templates/default'): self
+    {
+        $this->customButtons['client'][$name] = $slug;
+
+        $code = PHP_EOL.'  '.ExtensionBuilder::KERNEL.PHP_EOL
+            ."  \$res = \$kernel->handle();\n"
+            ."  \$kernel->terminate();\n"
+            ." return [\n"
+            ."  'templatefile' => '$template',\n"
+            ."  'vars' => [\n"
+            ."    'abstractContent' => \$res->getContent(),\n"
+            .'  ],'
+            ." ];\n";
+
+        $this->builder->__func(
+            $slug,
+            $code,
+            'array',
+            self::PARAMS,
+        );
+
+        return $this;
+    }
+
     public function withClientArea(bool $fullOverride, string $defaultTemplate = 'templates/default.tpl'): self
     {
         $template = $fullOverride ? 'tabOverviewReplacementTemplate' : 'tabOverviewModuleOutputTemplate';
@@ -253,6 +262,86 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             }
         }
 
+        if ([] !== $this->customButtons['client']) {
+            $this->builder->__func(
+                'ClientAreaCustomButtonArray',
+                $this->getCustomButtonCode($this->customButtons['client']),
+                'array'
+            );
+        }
+
+        if ([] !== $this->customButtons['admin']) {
+            $this->builder->__func(
+                'AdminCustomButtonArray',
+                $this->getCustomButtonCode($this->customButtons['admin']),
+                'array'
+            );
+        }
+
         return $this->builder;
+    }
+
+    private function getCustomButtonCode(array $values): string
+    {
+        $code = " global \$_LANG;\n"
+            ."  return [\n";
+        foreach ($values as $name => $slug) {
+            $key = $this->builder->getName();
+            $code .= "    (\$_LANG['$key']['$slug'] ?? '$name') => '$slug',\n";
+        }
+        $code .= '  ];';
+
+        return $code;
+    }
+
+    /**
+     * @internal
+     */
+    public function __addConfigOptions(array $options): void
+    {
+        $kernel = false;
+        $stamp = HandledStamp::class;
+        $code = "\nreturn [\n";
+        foreach ($options as $optionName => $option) {
+            $code .= "'$optionName' => [\n";
+            foreach ($option as $fieldName => $field) {
+                $code .= " '$fieldName' => ";
+
+                switch ($field['type']) {
+                    case FieldBuilder::VALUE_COMMAND:
+                        $kernel = true;
+                        $code .= "\$kernel->bus(new $field[value]())->last($stamp::class)->getResult(),\n";
+
+                        break;
+                    case FieldBuilder::VALUE_LOADER:
+                        $kernel = true;
+                        $code .= "function() use (\$kernel) { return \$kernel->bus(new $field[value]())->last($stamp::class)->getResult(); },\n";
+
+                        break;
+                    case FieldBuilder::VALUE_STRING:
+                        $code .= "'$field[value]',\n";
+
+                        break;
+                    case FieldBuilder::VALUE_INT:
+                        $code .= "$field[value],\n";
+
+                        break;
+                    case FieldBuilder::VALUE_BOOL:
+                        $code .= ($field['value'] ? 'true' : 'false').",\n";
+
+                        break;
+                    case FieldBuilder::VALUE_ARRAY:
+                        $code .= var_export($field['value'], true).",\n";
+                }
+            }
+            $code .= " ],\n";
+        }
+        $code .= '];';
+
+        if ($kernel) {
+            $code = $kernel = PHP_EOL.ExtensionBuilder::KERNEL.PHP_EOL.$code;
+        }
+
+        $this->builder->__func('ConfigOptions', $code, 'array');
     }
 }

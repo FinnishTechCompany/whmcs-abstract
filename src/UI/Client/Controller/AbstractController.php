@@ -13,7 +13,9 @@
 namespace IronLions\WHMCS\UI\Client\Controller;
 
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 abstract class AbstractController
 {
@@ -27,11 +29,12 @@ abstract class AbstractController
         $this->container = $container;
     }
 
-    protected function render(array $variables = [], string $view = ''): string
+    protected function render(array $variables = [], string $view = ''): Response
     {
         global $templates_compiledir;
+        $filename = (new \ReflectionClass(static::class))->getFileName();
         $twig = new Environment(
-            new \Twig\Loader\FilesystemLoader(\dirname(__DIR__, 2).'/Views'),
+            new FilesystemLoader(\dirname($filename, 2).'/Views'),
             [
                 'debug'            => true,
                 'strict_variables' => true,
@@ -39,9 +42,11 @@ abstract class AbstractController
             ]
         );
 
-        var_dump(static::class);
-        die;
+        if ('' === $view) {
+            $ns = explode('\\', static::class);
+            $view = str_replace('Controller', '', end($ns));
+        }
 
-        return $twig->render();
+        return new Response($twig->render($view.'.twig', $variables));
     }
 }

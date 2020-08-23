@@ -33,8 +33,15 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
         $this->path = $path;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function register(): void
     {
+        //var_dump($this->code);
+        //die();
         eval($this->code);
         $this->code = '';
         $this->name = '';

@@ -13,10 +13,12 @@
 namespace IronLions\WHMCS\Infra;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use IronLions\WHMCS\App\Service\CommandBusProxy;
 use Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,8 +54,8 @@ final class Kernel
 
     public function __construct()
     {
+        $this->registerBus();
         self::$cb->isCompiled() ?: self::$cb->compile();
-        $this->bus = new MessageBus($this->busMiddlewares());
         $this->setRequest();
         $matcher = new UrlMatcher(self::$routes, new RequestContext());
         $this->dispatcher = new EventDispatcher();
@@ -97,7 +99,9 @@ final class Kernel
                 if ('Handler' === !substr($handler, -7)) {
                     throw new \LogicException('Handler naming is invalid for automatic mapping. Please specify command manually.');
                 }
-                $handlers[substr($handler, 0, -7).'Command'][] = self::$cb->get($handler);
+
+                //$handlers[substr($handler, 0, -7).'Command'][] = self::$cb->get($handler);
+                $handlers[substr($handler, 0, -7).'Command'][] = function () use ($handler) { return self::$cb->get($handler); };
             } else {
                 // Override handlers.
                 foreach ($data[0] as $command) {
@@ -111,6 +115,27 @@ final class Kernel
         ];
     }
 
+    private function registerBus(): void
+    {
+        if (self::$cb->isCompiled()) {
+            // @noinspection PhpFieldAssignmentTypeMismatchInspection
+            $this->bus = self::$cb->get('app.command_bus');
+
+            return;
+        }
+
+        $this->bus = new MessageBus($this->busMiddlewares());
+        self::$cb->setDefinition(
+            'app.command_bus',
+            (new Definition())
+                ->setPublic(true)
+                ->setAutowired(true)
+                ->setAutoconfigured(true)
+                ->setArgument(0, $this->bus)
+                ->setClass(CommandBusProxy::class)
+        );
+    }
+
     private function setRequest(): void
     {
         $req = Request::createFromGlobals();
@@ -122,6 +147,15 @@ final class Kernel
             $uri['path'] .= '/'.$req->query->get('action');
             unset($query['action']);
         }
+
+        if (isset($query['modop']) && 'custom' === strtolower($query['modop'])) {
+            if (isset($query['a'])) {
+                $uri['path'] .= '/'.$req->query->get('a');
+                unset($query['a']);
+            }
+            unset($query['modop']);
+        }
+
         $uri['query'] = http_build_query($query);
 
         $this->request = Request::create(
