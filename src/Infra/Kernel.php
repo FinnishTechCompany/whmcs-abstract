@@ -75,7 +75,7 @@ final class Kernel
      */
     public function bus($command, array $stamps = []): Envelope
     {
-        return $this->bus->dispatch($command, $stamps);
+        return self::$cb->get('app.command_bus')->dispatch($command, $stamps);
     }
 
     public function handle(): Response
@@ -101,7 +101,8 @@ final class Kernel
                 }
 
                 //$handlers[substr($handler, 0, -7).'Command'][] = self::$cb->get($handler);
-                $handlers[substr($handler, 0, -7).'Command'][] = function () use ($handler) { return self::$cb->get($handler); };
+                $handlers[substr($handler, 0, -7).'Command'][] =
+                    function (...$args) use ($handler) { return self::$cb->get($handler)(...$args); };
             } else {
                 // Override handlers.
                 foreach ($data[0] as $command) {
@@ -118,7 +119,6 @@ final class Kernel
     private function registerBus(): void
     {
         if (self::$cb->isCompiled()) {
-            // @noinspection PhpFieldAssignmentTypeMismatchInspection
             $this->bus = self::$cb->get('app.command_bus');
 
             return;
