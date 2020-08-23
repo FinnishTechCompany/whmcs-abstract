@@ -19,7 +19,7 @@ use IronLions\WHMCS\Domain\Configuration as I;
 use IronLions\WHMCS\Domain\Repo\ConfigurationRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Configuration extends AbstractQuery implements ConfigurationRepositoryInterface
+class Configuration extends AbstractQuery implements ConfigurationRepositoryInterface
 {
     /**
      * @throws Exception
@@ -60,7 +60,7 @@ final class Configuration extends AbstractQuery implements ConfigurationReposito
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

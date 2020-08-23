@@ -21,7 +21,7 @@ use IronLions\WHMCS\Domain\Invoice;
 use IronLions\WHMCS\Domain\Repo\Invoice\ItemsRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Items extends AbstractQuery implements ItemsRepositoryInterface
+class Items extends AbstractQuery implements ItemsRepositoryInterface
 {
     /**
      * @throws \Exception
@@ -105,7 +105,7 @@ final class Items extends AbstractQuery implements ItemsRepositoryInterface
      *
      * @return Invoice\Items[]
      */
-    private function mapEntity(array $items): array
+    protected function mapEntity(array $items): array
     {
         foreach ($items as &$item) {
             $dueDate = null === $item->{Invoice\Items::FIELD_DUE_DATE} ?

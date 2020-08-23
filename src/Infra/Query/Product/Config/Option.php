@@ -18,7 +18,7 @@ use IronLions\WHMCS\Domain\Product\Config\Option as I;
 use IronLions\WHMCS\Domain\Repo\Product\Config\OptionRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Option extends AbstractQuery implements OptionRepositoryInterface
+class Option extends AbstractQuery implements OptionRepositoryInterface
 {
     public function create(I $option): I
     {
@@ -74,7 +74,7 @@ final class Option extends AbstractQuery implements OptionRepositoryInterface
     /**
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

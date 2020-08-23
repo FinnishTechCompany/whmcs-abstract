@@ -16,7 +16,7 @@ use IronLions\WHMCS\Domain\Product\Config\Option\Sub as I;
 use IronLions\WHMCS\Domain\Repo\Product\Config\Option\SubRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Sub extends AbstractQuery implements SubRepositoryInterface
+class Sub extends AbstractQuery implements SubRepositoryInterface
 {
     public function getOneById(int $id): I
     {
@@ -38,7 +38,7 @@ final class Sub extends AbstractQuery implements SubRepositoryInterface
         $this->_update($sub->getId(), I::FIELD_ID, I::TABLE, self::getMap($sub));
     }
 
-    private static function getMap(I $sub): array
+    protected static function getMap(I $sub): array
     {
         return [
             I::FIELD_CONFIG_ID   => $sub->configId,
@@ -51,7 +51,7 @@ final class Sub extends AbstractQuery implements SubRepositoryInterface
     /**
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

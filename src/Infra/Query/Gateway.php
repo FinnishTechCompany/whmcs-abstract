@@ -18,7 +18,7 @@ use IronLions\WHMCS\Domain\Repo\GatewayRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 use WHMCS\Database\Capsule;
 
-final class Gateway extends AbstractQuery implements GatewayRepositoryInterface
+class Gateway extends AbstractQuery implements GatewayRepositoryInterface
 {
     /**
      * @return \IronLions\WHMCS\Domain\Gateway[]

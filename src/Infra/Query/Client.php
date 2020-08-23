@@ -22,7 +22,7 @@ use IronLions\WHMCS\Domain\Client as C;
 use IronLions\WHMCS\Domain\Repo\ClientRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Client extends AbstractQuery implements ClientRepositoryInterface
+class Client extends AbstractQuery implements ClientRepositoryInterface
 {
     /**
      * @throws Exception
@@ -110,7 +110,7 @@ final class Client extends AbstractQuery implements ClientRepositoryInterface
      *
      * @return C[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new C(

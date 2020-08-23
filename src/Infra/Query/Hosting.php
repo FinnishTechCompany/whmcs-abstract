@@ -20,7 +20,7 @@ use IronLions\WHMCS\Domain\Hosting as I;
 use IronLions\WHMCS\Domain\Repo\HostingRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Hosting extends AbstractQuery implements HostingRepositoryInterface
+class Hosting extends AbstractQuery implements HostingRepositoryInterface
 {
     public function getOneById(int $id): I
     {
@@ -40,7 +40,7 @@ final class Hosting extends AbstractQuery implements HostingRepositoryInterface
         );
     }
 
-    private static function getMap(I $hosting): array
+    protected static function getMap(I $hosting): array
     {
         return [
             I::FIELD_USERID                 => $hosting->userId,
@@ -86,7 +86,7 @@ final class Hosting extends AbstractQuery implements HostingRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

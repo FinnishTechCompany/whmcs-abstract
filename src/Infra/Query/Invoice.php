@@ -22,7 +22,7 @@ use IronLions\WHMCS\Domain\Repo\InvoiceRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 use IronLions\WHMCS\Infra\Query\Invoice\Items;
 
-final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
+class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
 {
     /**
      * @throws Exception
@@ -72,7 +72,7 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

@@ -21,7 +21,7 @@ use IronLions\WHMCS\Domain\Custom\Field\Value as I;
 use IronLions\WHMCS\Domain\Repo\Custom\Field\ValueRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Value extends AbstractQuery implements ValueRepositoryInterface
+class Value extends AbstractQuery implements ValueRepositoryInterface
 {
     public function getOneById(int $id): I
     {
@@ -51,7 +51,7 @@ final class Value extends AbstractQuery implements ValueRepositoryInterface
         );
     }
 
-    private static function getMap(I $field): array
+    protected static function getMap(I $field): array
     {
         return [
             I::FIELD_FIELD_ID          => $field->fieldId,
@@ -67,7 +67,7 @@ final class Value extends AbstractQuery implements ValueRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

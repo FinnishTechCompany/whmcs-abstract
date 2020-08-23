@@ -16,7 +16,7 @@ use IronLions\WHMCS\Domain\Product\Config\Group as I;
 use IronLions\WHMCS\Domain\Repo\Product\Config\GroupRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Group extends AbstractQuery implements GroupRepositoryInterface
+class Group extends AbstractQuery implements GroupRepositoryInterface
 {
     public function getOneById(int $id): I
     {
@@ -38,7 +38,7 @@ final class Group extends AbstractQuery implements GroupRepositoryInterface
         return $this->getOneById($this->_insert(I::TABLE, self::getMap($group)));
     }
 
-    private static function getMap(I $group): array
+    protected static function getMap(I $group): array
     {
         return [
             I::FIELD_NAME        => $group->name,
@@ -51,7 +51,7 @@ final class Group extends AbstractQuery implements GroupRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

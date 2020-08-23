@@ -20,7 +20,7 @@ use IronLions\WHMCS\Domain\Repo\ServerRepositoryInterface;
 use IronLions\WHMCS\Domain\Server as I;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Server extends AbstractQuery implements ServerRepositoryInterface
+class Server extends AbstractQuery implements ServerRepositoryInterface
 {
     /**
      * @throws Exception
@@ -93,7 +93,7 @@ final class Server extends AbstractQuery implements ServerRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(

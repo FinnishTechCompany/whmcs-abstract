@@ -20,7 +20,7 @@ use IronLions\WHMCS\Domain\Custom\Field as I;
 use IronLions\WHMCS\Domain\Repo\Custom\FieldRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
-final class Field extends AbstractQuery implements FieldRepositoryInterface
+class Field extends AbstractQuery implements FieldRepositoryInterface
 {
     public function getOneById(int $id): I
     {
@@ -40,7 +40,7 @@ final class Field extends AbstractQuery implements FieldRepositoryInterface
         );
     }
 
-    private static function getMap(I $field): array
+    protected static function getMap(I $field): array
     {
         return [
             I::FIELD_TYPE          => $field->type,
@@ -65,7 +65,7 @@ final class Field extends AbstractQuery implements FieldRepositoryInterface
      *
      * @return I[]
      */
-    private function mapEntity(array $results): array
+    protected function mapEntity(array $results): array
     {
         foreach ($results as &$result) {
             $result = new I(
