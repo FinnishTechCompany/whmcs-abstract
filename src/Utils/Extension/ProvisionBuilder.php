@@ -27,8 +27,8 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
     private ExtensionBuilder $builder;
     private array $required =
     [
-        'withTestConnection' => false,
-        'withCreateAccount'  => false,
+        'withTestConnection'   => false,
+        'withCreateAccount'    => false,
         'withTerminateAccount' => false,
     ];
 
@@ -195,7 +195,6 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         );
 
         return $this;
-
     }
 
     /**
@@ -220,14 +219,13 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         );
 
         return $this;
-
     }
 
     public function withClientArea(): self
     {
         $code = '\n'
             ."\$requestedAction = isset(\$_REQUEST['customAction']) ? \$_REQUEST['customAction'] : '';"
-            . "";
+            .'';
 
         $this->builder->__func(
             'ClientArea',
