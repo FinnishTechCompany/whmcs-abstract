@@ -13,8 +13,6 @@
 namespace IronLions\WHMCS\Infra;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\FileCacheReader;
 use Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderResolver;
@@ -36,9 +34,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
 use Symfony\Component\Messenger\Stamp\StampInterface;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
-use Symfony\Component\Routing\Loader\AnnotationFileLoader;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use Symfony\Component\Routing\Loader\DirectoryLoader;
 use Symfony\Component\Routing\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -55,27 +51,6 @@ final class Kernel
     private static ContainerBuilder $cb;
     private static RouteCollection $routes;
 
-
-    private function setRequest(): void
-    {
-        $req = Request::createFromGlobals();
-        $uri = parse_url($req->getUri());
-        $uri['path'] = str_replace('.php', '', trim($uri['path'], '/'));
-
-        $query = $req->query->all();
-        if(isset($query['action'])) {
-            $uri['path'] .= '/'.$req->query->get('action');
-            unset($query['action']);
-        }
-        $uri['query'] = $query;
-
-        var_dump(\http_build_url($uri));
-        die;
-        $this->request = Request::create(
-
-        );
-    }
-
     public function __construct()
     {
         self::$cb->isCompiled() ?: self::$cb->compile();
@@ -85,8 +60,6 @@ final class Kernel
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber(new RouterListener($matcher, new RequestStack()));
 
-        var_dump($this->request);
-        die;
         $this->kernel = new HttpKernel(
             $this->dispatcher,
             new ControllerResolver(),
@@ -137,6 +110,30 @@ final class Kernel
         return [
             new HandleMessageMiddleware(new HandlersLocator($handlers)),
         ];
+    }
+
+    private function setRequest(): void
+    {
+        $req = Request::createFromGlobals();
+        $uri = parse_url($req->getUri());
+        $uri['path'] = str_replace('.php', '', trim($uri['path'], '/'));
+
+        $query = $req->query->all();
+        if (isset($query['action'])) {
+            $uri['path'] .= '/'.$req->query->get('action');
+            unset($query['action']);
+        }
+        $uri['query'] = http_build_query($query);
+
+        $this->request = Request::create(
+            http_build_url($uri),
+            $req->getRealMethod(),
+            'GET' === $req->getMethod() ? $query : $req->request->all(),
+            $req->cookies->all(),
+            $req->files->all(),
+            $req->server->all(),
+            $req->getContent()
+        );
     }
 
     /**
