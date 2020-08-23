@@ -21,12 +21,15 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 final class ProvisionBuilder implements AllowExtensionFunctionInterface
 {
     private const LOG = 'provisioningmodule';
+    private const PARAMS = 'array $params';
+    private const PARAMS_CLASS = 'IronLions\WHMCS\Domain\Params\Provisioning\ModuleParameters';
 
     private ExtensionBuilder $builder;
     private array $required =
     [
         'withTestConnection' => false,
         'withCreateAccount'  => false,
+        'withTerminateAccount' => false,
     ];
 
     public function __construct(ExtensionBuilder $builder)
@@ -140,7 +143,7 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             'TestConnection',
             $entrypoint,
             'array',
-            'array $params',
+            self::PARAMS,
             'IronLions\WHMCS\Domain\Params\Provisioning\TestConnectionParams',
             self::LOG
         );
@@ -165,9 +168,72 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             'CreateAccount',
             $entrypoint,
             'string',
-            'array $params',
-            'IronLions\WHMCS\Domain\Params\Provisioning\ModuleParameters',
+            self::PARAMS,
+            self::PARAMS_CLASS,
             self::LOG
+        );
+
+        return $this;
+    }
+
+    /**
+     * Terminate instance of a product/service.
+     *
+     * Called when a termination is requested. This can be invoked automatically for
+     * overdue products if enabled, or requested manually by an admin user.
+     */
+    public function withTerminateAccount(array $entrypoint): self
+    {
+        $this->required[__FUNCTION__] = true;
+        $this->builder->__entryFunc(
+            'TerminateAccount',
+            $entrypoint,
+            'string',
+            self::PARAMS,
+            self::PARAMS_CLASS,
+            self::LOG
+        );
+
+        return $this;
+
+    }
+
+    /**
+     * Change the password for an instance of a product/service.
+     *
+     * Called when a password change is requested. This can occur either due to a
+     * client requesting it via the client area or an admin requesting it from the
+     * admin side.
+     *
+     * This option is only available to client end users when the product is in an
+     * active status.
+     */
+    public function withChangePassword(array $entrypoint): self
+    {
+        $this->builder->__entryFunc(
+            'ChangePassword',
+            $entrypoint,
+            'string',
+            self::PARAMS,
+            self::PARAMS_CLASS,
+            self::LOG
+        );
+
+        return $this;
+
+    }
+
+    public function withClientArea(): self
+    {
+        $code = '\n'
+            ."\$requestedAction = isset(\$_REQUEST['customAction']) ? \$_REQUEST['customAction'] : '';"
+            . "";
+
+        $this->builder->__func(
+            'ClientArea',
+            $code,
+            'array',
+            self::PARAMS
         );
 
         return $this;

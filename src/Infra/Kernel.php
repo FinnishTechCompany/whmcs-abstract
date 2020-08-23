@@ -31,7 +31,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
 use Symfony\Component\Messenger\Stamp\StampInterface;
 
-final class Kernel
+final class Kernel extends \Symfony\Component\HttpKernel\Kernel
 {
     private Request $request;
     private Response $response;
