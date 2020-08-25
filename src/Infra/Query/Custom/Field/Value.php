@@ -16,8 +16,11 @@ namespace IronLions\WHMCS\Infra\Query\Custom\Field;
 
 use DateTimeImmutable;
 use Exception;
+use IronLions\WHMCS\App\Service\EntityManager as em;
 use IronLions\WHMCS\Domain\Custom\Field;
 use IronLions\WHMCS\Domain\Custom\Field\Value as I;
+use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
+use IronLions\WHMCS\Domain\Hosting;
 use IronLions\WHMCS\Domain\Repo\Custom\Field\ValueRepositoryInterface;
 use IronLions\WHMCS\Infra\AbstractQuery;
 
@@ -36,6 +39,22 @@ class Value extends AbstractQuery implements ValueRepositoryInterface
     public function getByRefId(int $id): array
     {
         return $this->mapEntity($this->_getBy($id, I::FIELD_REL_ID, I::TABLE));
+    }
+
+    public function getOneByRefAndFieldId(Field $field, Hosting $hosting): I
+    {
+        $arr = em::_table(I::TABLE)
+            ->where(I::FIELD_FIELD_ID, '=', $field->getId())
+            ->where(I::FIELD_REL_ID, '=', $hosting->getId())
+            ->limit(1)
+            ->get()
+            ->toArray();
+
+        if ([] === $arr) {
+            throw new EntityNotFoundException();
+        }
+
+        return $this->mapEntity($arr)[0];
     }
 
     /**

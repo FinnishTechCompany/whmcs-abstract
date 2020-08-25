@@ -17,6 +17,7 @@ namespace IronLions\WHMCS\Domain\Repo\Custom\Field;
 use IronLions\WHMCS\Domain\Custom\Field;
 use IronLions\WHMCS\Domain\Custom\Field\Value as I;
 use IronLions\WHMCS\Domain\Exception\EntityNotFoundException;
+use IronLions\WHMCS\Domain\Hosting;
 
 interface ValueRepositoryInterface
 {
@@ -34,6 +35,11 @@ interface ValueRepositoryInterface
      * @return I[]
      */
     public function getByRefId(int $id): array;
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function getOneByRefAndFieldId(Field $field, Hosting $hosting): I;
 
     public function update(I $value): void;
 

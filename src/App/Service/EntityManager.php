@@ -18,9 +18,6 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use WHMCS\Database\Capsule;
 
-/**
- * @deprecated
- */
 class EntityManager
 {
     /**
