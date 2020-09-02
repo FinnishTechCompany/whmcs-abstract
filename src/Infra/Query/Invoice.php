@@ -99,7 +99,7 @@ final class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
                 (string) $result->{I::FIELD_PAYMENT_METHOD},
                 (int) $result->{I::FIELD_PAYMENT_METHOD_ID},
                 (string) $result->{I::FIELD_NOTES},
-                em::invoiceItems()->getForInvoice($result->{I::FIELD_ID})
+                em::invoiceItems()->getForInvoice((int)$result->{I::FIELD_ID})
             );
         }
 
