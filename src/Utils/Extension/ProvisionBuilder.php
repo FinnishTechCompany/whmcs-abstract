@@ -192,11 +192,11 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
         );
 
         if ($admin) {
-            $this->customButtons['admin'][$name] = $slug;
+            $this->customButtons['admin'][$name] = ['slug' => $slug];
         }
 
         if ($client) {
-            $this->customButtons['client'][$name] = $slug;
+            $this->customButtons['client'][$name] = ['slug' => $slug];
         }
 
         return $this;
@@ -206,9 +206,9 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
      * Add new page to the product page.
      * This will be handled by your controller.
      */
-    public function withCustomPage(string $name, string $slug, string $template = 'templates/default'): self
+    public function withCustomPage(string $name, string $slug, string $icon = '', string $template = 'templates/default'): self
     {
-        $this->customButtons['client'][$name] = $slug;
+        $this->customButtons['client'][$name] = ['slug' => $slug, 'icon' => $icon];
 
         $code = PHP_EOL.'  '.ExtensionBuilder::KERNEL.PHP_EOL
             ."  \$res = \$kernel->handle();\n"
@@ -287,7 +287,10 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             ."  return [\n";
         foreach ($values as $name => $slug) {
             $key = $this->builder->getName();
-            $code .= "    (\$_LANG['$key']['$slug'] ?? '$name') => '$slug',\n";
+            $code .= (isset($slug['icon'])
+                ? "    (\$_LANG['$key']['$slug[slug]'] ?? '<i class=\'$slug[icon]\'></i>$name') => '$slug[slug]',\n"
+                : "    (\$_LANG['$key']['$slug[slug]'] ?? '$name') => '$slug[slug]',\n"
+            );
         }
         $code .= '  ];';
 

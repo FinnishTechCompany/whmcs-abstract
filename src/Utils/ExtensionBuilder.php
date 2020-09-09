@@ -40,8 +40,6 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
 
     public function register(): void
     {
-        //var_dump($this->code);
-        //die();
         eval($this->code);
         $this->code = '';
         $this->name = '';
