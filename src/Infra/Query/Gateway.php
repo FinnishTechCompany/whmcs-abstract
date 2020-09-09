@@ -27,7 +27,8 @@ class Gateway extends AbstractQuery implements GatewayRepositoryInterface
     {
         $result = Capsule::table(static::TBL_GATEWAYS)
             ->groupBy('gateway')
-            ->get();
+            ->get()
+            ->toArray();
 
         foreach ($result as &$item) {
             $item = \IronLions\WHMCS\Domain\Gateway::fromStd($item);
