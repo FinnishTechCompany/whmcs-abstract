@@ -37,6 +37,11 @@ final class AddonBuilder implements AllowExtensionFunctionInterface
         $this->builder = $builder;
     }
 
+    public function done(): ExtensionBuilder
+    {
+        return $this->builder;
+    }
+
     public function withConfig(
         string $name,
         string $description,
