@@ -13,6 +13,7 @@
 namespace IronLions\WHMCS\Utils;
 
 use IronLions\WHMCS\Infra\Kernel;
+use IronLions\WHMCS\Utils\Extension\AddonBuilder;
 use IronLions\WHMCS\Utils\Extension\AllowExtensionFunctionInterface;
 use IronLions\WHMCS\Utils\Extension\Entrypoint\ExtensionEntrypointInterface;
 use IronLions\WHMCS\Utils\Extension\ProvisionBuilder;
@@ -51,16 +52,21 @@ final class ExtensionBuilder implements AllowExtensionFunctionInterface
         return new HookBuilder($this);
     }
 
+    public function withProvision(): ProvisionBuilder
+    {
+        return new ProvisionBuilder($this);
+    }
+
+    public function withAddon(): AddonBuilder
+    {
+        return new AddonBuilder($this);
+    }
+
     public function withControllers(string $dir): self
     {
         Kernel::__rt()->import($dir, 'annotation');
 
         return $this;
-    }
-
-    public function withProvision(): ProvisionBuilder
-    {
-        return new ProvisionBuilder($this);
     }
 
     public function __func(
