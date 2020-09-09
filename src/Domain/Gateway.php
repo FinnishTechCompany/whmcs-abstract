@@ -28,11 +28,11 @@ final class Gateway
     public static function fromStd(\stdClass $item): self
     {
         return new self(
-            $item->id,
+            (int)$item->id,
             $item->gateway,
             $item->setting,
             $item->value,
-            $item->order
+            (int)$item->order
         );
     }
 
