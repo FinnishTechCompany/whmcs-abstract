@@ -33,7 +33,8 @@ class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
         $results = em::_table(I::TABLE)
             ->where(I::FIELD_ID, '=', $id)
             ->limit(1)
-            ->get();
+            ->get()
+            ->toArray();
 
         return $this->mapEntity($results)[0];
     }
@@ -94,7 +95,7 @@ class Invoice extends AbstractQuery implements InvoiceRepositoryInterface
                 (string) $result->{I::FIELD_PAYMENT_METHOD},
                 (int) $result->{I::FIELD_PAYMENT_METHOD_ID},
                 (string) $result->{I::FIELD_NOTES},
-                (new Items())->getForInvoice($result->{I::FIELD_ID})
+                (new Items())->getForInvoice((int)$result->{I::FIELD_ID})
             );
         }
 

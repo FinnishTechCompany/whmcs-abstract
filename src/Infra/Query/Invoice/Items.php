@@ -33,7 +33,8 @@ class Items extends AbstractQuery implements ItemsRepositoryInterface
         /** @var Collection|array $items */
         $items = em::_table(Invoice\Items::TABLE)
             ->where(Invoice\Items::FIELD_INVOICE_ID, '=', $invoiceId)
-            ->get();
+            ->get()
+            ->toArray();
 
         return $this->mapEntity($items);
     }

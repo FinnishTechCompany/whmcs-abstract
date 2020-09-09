@@ -33,7 +33,8 @@ class Client extends AbstractQuery implements ClientRepositoryInterface
         $results = em::_table(C::TABLE)
             ->where(C::FIELD_ID, '=', $id)
             ->limit(1)
-            ->get();
+            ->get()
+            ->toArray();
 
         return $this->mapEntity($results)[0];
     }
