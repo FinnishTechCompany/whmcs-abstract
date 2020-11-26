@@ -40,6 +40,40 @@ class Client extends AbstractQuery implements ClientRepositoryInterface
     }
 
     /**
+     * @throws Exception
+     */
+    public function search(string $keyword): array
+    {
+        /** @var Collection|array $results */
+        $results = em::_table(C::TABLE)
+            ->where(C::FIELD_FIRST_NAME, 'like', "${keyword}%")
+            ->orWhere(C::FIELD_LAST_NAME, 'like', "${keyword}%")
+            ->orWhere(C::FIELD_COMPANY_NAME, 'like', "%${keyword}%")
+            ->orWhere(C::FIELD_EMAIL, 'like', "${keyword}%")
+            ->limit(15)
+            ->get()
+            ->toArray();
+
+        return $this->mapEntity($results);
+    }
+
+    public function getPaginated(int $page): array
+    {
+        /** @var Collection|array $results */
+        $results = em::_table(C::TABLE)
+            ->paginate($page)
+            ->toArray();
+
+        return [
+            'data'    => $this->mapEntity($results['data']),
+            'current' => $results['current_page'],
+            'last'    => $results['last_page'],
+            'next'    => $results['next_page'],
+            'total'   => $results['total'],
+        ];
+    }
+
+    /**
      * @param C $client
      */
     public function update(C $client): void

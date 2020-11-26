@@ -13,6 +13,7 @@
 namespace IronLions\WHMCS\Utils;
 
 use IronLions\WHMCS\Utils\Extension\AllowExtensionFunctionInterface;
+use IronLions\WHMCS\Utils\Hook\ClientAreaHookBuilder;
 use IronLions\WHMCS\Utils\Hook\CronHookBuilder;
 
 final class HookBuilder implements AllowExtensionFunctionInterface
@@ -30,6 +31,11 @@ final class HookBuilder implements AllowExtensionFunctionInterface
         return new CronHookBuilder($this);
     }
 
+    public function withClientArea(): ClientAreaHookBuilder
+    {
+        return new ClientAreaHookBuilder($this);
+    }
+
     public function registerHooks(): ExtensionBuilder
     {
         $code = "\n\n";
@@ -38,7 +44,7 @@ final class HookBuilder implements AllowExtensionFunctionInterface
                 throw new \LogicException("Invalid command class '$hook[c]' given to hook '$hook[n]'");
             }
 
-            $code .= "add_hook('$hook[n]', $hook[p], function(array \$vars) { \n"
+            $code .= "add_hook('$hook[n]', $hook[p], function(\$vars) { \n"
                 .('' === $hook['d'] ? '' : "  \$vars = new $hook[d](\$vars);\n")
                 .'  '.ExtensionBuilder::KERNEL.PHP_EOL
                 .('' === $hook['d']

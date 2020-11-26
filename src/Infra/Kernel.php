@@ -21,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +42,6 @@ use Symfony\Component\Routing\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Router;
 
 final class Kernel
 {
@@ -82,7 +82,15 @@ final class Kernel
 
     public function handle(): Response
     {
-        $this->response = $this->kernel->handle($this->request, HttpKernelInterface::SUB_REQUEST, false);
+        try {
+            $this->response = $this->kernel->handle($this->request, HttpKernelInterface::SUB_REQUEST, false);
+        } catch (NotFoundHttpException $e) {
+            if (\defined('FITECO_API')) {
+                $this->response = new JsonResponse(['error' => 'Not found'], 404);
+            } else {
+                throw $e;
+            }
+        }
 
         return $this->response;
     }
@@ -140,11 +148,31 @@ final class Kernel
 
     private function setRequest(): void
     {
+        global $customadminpath;
         $req = Request::createFromGlobals();
         $uri = parse_url($req->getUri());
-        $uri['path'] = str_replace('.php', '', trim($uri['path'], '/'));
-
+        $admin = 1 === preg_match("/^\/${customadminpath}\//i", $uri['path']);
         $query = $req->query->all();
+
+        if (\defined('FITECO_API') && !$admin) {
+            $this->setApiRequest($req, $uri);
+
+            return;
+        }
+
+        if ($admin) {
+            if (isset($query['module'])) {
+                $uri['path'] = str_replace('/addonmodules', '', $uri['path']);
+            }
+            $uri['path'] = '__admin__'.preg_replace("/^\/${customadminpath}/i", '', $uri['path']);
+        }
+
+        $uri['path'] = str_replace(
+            ['index.php', '.php'],
+            ['', ''],
+            trim($uri['path'], '/')
+        );
+
         if (isset($query['action'])) {
             $uri['path'] .= '/'.$req->query->get('action');
             unset($query['action']);
@@ -158,12 +186,42 @@ final class Kernel
             unset($query['modop']);
         }
 
+        if (isset($query['m'])) {
+            $uri['path'] .= '/'.$req->query->get('m');
+            unset($query['m']);
+        }
+
+        if (isset($query['m'])) {
+            $uri['path'] .= '/'.$req->query->get('m');
+            unset($query['m']);
+        }
+
+        if (isset($query['module'])) {
+            $uri['path'] .= '/'.$req->query->get('module');
+            unset($query['module']);
+        }
+
         $uri['query'] = http_build_query($query);
 
         $this->request = Request::create(
             http_build_url($uri),
             $req->getRealMethod(),
             'GET' === $req->getMethod() ? $query : $req->request->all(),
+            $req->cookies->all(),
+            $req->files->all(),
+            $req->server->all(),
+            $req->getContent()
+        );
+    }
+
+    private function setApiRequest(Request $req, array $uri): void
+    {
+        $uri['path'] = 'api'.str_replace(FITECO_API, '', trim($uri['path'], '/'));
+
+        $this->request = Request::create(
+            http_build_url($uri),
+            $req->getRealMethod(),
+            $req->request->all(),
             $req->cookies->all(),
             $req->files->all(),
             $req->server->all(),

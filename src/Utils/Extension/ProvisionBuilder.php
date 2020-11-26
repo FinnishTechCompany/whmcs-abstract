@@ -287,7 +287,8 @@ final class ProvisionBuilder implements AllowExtensionFunctionInterface
             ."  return [\n";
         foreach ($values as $name => $slug) {
             $key = $this->builder->getName();
-            $code .= (isset($slug['icon'])
+            $code .= (
+                isset($slug['icon'])
                 ? "    (\$_LANG['$key']['$slug[slug]'] ?? '<i class=\'$slug[icon]\'></i>$name') => '$slug[slug]',\n"
                 : "    (\$_LANG['$key']['$slug[slug]'] ?? '$name') => '$slug[slug]',\n"
             );

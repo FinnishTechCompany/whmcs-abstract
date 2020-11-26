@@ -12,11 +12,7 @@
 
 namespace IronLions\WHMCS\Utils\Extension;
 
-use IronLions\WHMCS\Utils\Extension\Entrypoint\ExtensionEntrypointInterface;
-use IronLions\WHMCS\Utils\Extension\Field\FieldBuilder;
-use IronLions\WHMCS\Utils\Extension\Provision\ConfigOptionsBuilder;
 use IronLions\WHMCS\Utils\ExtensionBuilder;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final class AddonBuilder implements AllowExtensionFunctionInterface
 {
@@ -27,7 +23,7 @@ final class AddonBuilder implements AllowExtensionFunctionInterface
     private ExtensionBuilder $builder;
     private array $required =
     [
-        'withConfig'   => false,
+        'withConfig'           => false,
         'withCreateAccount'    => false,
         'withTerminateAccount' => false,
     ];
@@ -40,6 +36,53 @@ final class AddonBuilder implements AllowExtensionFunctionInterface
     public function done(): ExtensionBuilder
     {
         return $this->builder;
+    }
+
+    public function withClientArea(
+        string $title,
+        bool $requireLogin = true,
+        string $defaultTemplate = 'templates/default.tpl'
+    ): self {
+        $login = $requireLogin ? 'true' : 'false';
+
+        $code = PHP_EOL.'  '.ExtensionBuilder::KERNEL.PHP_EOL
+            ."  \$res = \$kernel->handle();\n"
+            ."  \$kernel->terminate();\n"
+            ."\n  return [\n"
+            ."    'pagetitle' => '$title',\n"
+            ."    'templatefile' => '$defaultTemplate',\n"
+            ."    'requirelogin' => '$login',\n"
+            ."    'vars' => [\n"
+            ."      'abstractContent' => \$res->getContent(),\n"
+            ."    ],\n"
+            .'  ];';
+
+        $this->builder->__func(
+            'clientarea',
+            $code,
+            'array',
+            self::PARAMS
+        );
+
+        return $this;
+    }
+
+    public function withAdminArea(): self
+    {
+        $code = PHP_EOL.'  '.ExtensionBuilder::KERNEL.PHP_EOL
+            ."  \$res = \$kernel->handle();\n"
+            ."  \$kernel->terminate();\n"
+            ." echo \$res->getContent(); \n"
+            ."\n  return \$res->getContent();\n";
+
+        $this->builder->__func(
+            'output',
+            $code,
+            'string',
+            self::PARAMS
+        );
+
+        return $this;
     }
 
     public function withConfig(

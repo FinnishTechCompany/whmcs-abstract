@@ -19,6 +19,9 @@ use IronLions\WHMCS\Domain\Core\Request;
 use IronLions\WHMCS\Domain\Core\Response;
 use IronLions\WHMCS\Domain\Exception\Http\RouteNotFoundException;
 
+/**
+ * @deprecated
+ */
 final class Dispatcher
 {
     public static array $vars = [];

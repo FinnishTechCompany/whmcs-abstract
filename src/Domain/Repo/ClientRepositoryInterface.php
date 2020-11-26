@@ -20,5 +20,9 @@ interface ClientRepositoryInterface
 {
     public function getOneById(int $id): Client;
 
+    public function getPaginated(int $page): array;
+
+    public function search(string $keyword): array;
+
     public function update(Client $client): void;
 }
