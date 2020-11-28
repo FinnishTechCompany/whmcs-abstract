@@ -12,13 +12,14 @@
 
 namespace IronLions\WHMCS\Utils\Extension;
 
+use IronLions\WHMCS\Utils\Config\ConfigOptionsBuilder;
+use IronLions\WHMCS\Utils\Config\ConfigOptionsBuilderAware;
+use IronLions\WHMCS\Utils\Config\Field\FieldBuilder;
 use IronLions\WHMCS\Utils\Extension\Entrypoint\ExtensionEntrypointInterface;
-use IronLions\WHMCS\Utils\Extension\Field\FieldBuilder;
-use IronLions\WHMCS\Utils\Extension\Provision\ConfigOptionsBuilder;
 use IronLions\WHMCS\Utils\ExtensionBuilder;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
-final class ProvisionBuilder implements AllowExtensionFunctionInterface
+final class ProvisionBuilder implements AllowExtensionFunctionInterface, ConfigOptionsBuilderAware
 {
     private const LOG = 'provisioningmodule';
     private const PARAMS = 'array $params';

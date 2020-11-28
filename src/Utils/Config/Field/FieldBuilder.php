@@ -10,7 +10,7 @@
  *
  */
 
-namespace IronLions\WHMCS\Utils\Extension\Field;
+namespace IronLions\WHMCS\Utils\Config\Field;
 
 abstract class FieldBuilder
 {

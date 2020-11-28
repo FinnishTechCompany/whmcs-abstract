@@ -10,17 +10,17 @@
  *
  */
 
-namespace IronLions\WHMCS\Utils\Extension\Provision;
+namespace IronLions\WHMCS\Utils\Config;
 
-use IronLions\WHMCS\Utils\Extension\Field\FieldBuilder;
-use IronLions\WHMCS\Utils\Extension\ProvisionBuilder;
+use IronLions\WHMCS\Utils\Config\Field\FieldBuilder;
+use IronLions\WHMCS\Utils\Extension\AddonBuilder;
 
 final class ConfigOptionsBuilder
 {
-    private ProvisionBuilder $builder;
+    private ConfigOptionsBuilderAware $builder;
     private array $fields;
 
-    public function __construct(ProvisionBuilder $builder)
+    public function __construct(ConfigOptionsBuilderAware $builder)
     {
         $this->builder = $builder;
     }
@@ -55,7 +55,10 @@ final class ConfigOptionsBuilder
         return new ConfigOptionFieldBuilder($this, $name, FieldBuilder::TYPE_AREA);
     }
 
-    public function done(): ProvisionBuilder
+    /**
+     * @return AddonBuilder
+     */
+    public function done(): ConfigOptionsBuilderAware
     {
         $this->builder->__addConfigOptions($this->fields);
 

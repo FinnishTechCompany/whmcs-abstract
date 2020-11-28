@@ -89,14 +89,17 @@ final class AddonBuilder implements AllowExtensionFunctionInterface
         string $name,
         string $description,
         string $version,
-        string $author
+        string $author,
+        array $options = []
     ): self {
         $this->required[__FUNCTION__] = true;
+        $options = var_export($options, true);
         $code = 'return ['
             ."'name'         => '$name',"
             ."'description'  => '$description',"
             ."'version'      => '$version',"
-            ."'author'       => '$author'"
+            ."'author'       => '$author',"
+            ."'fields'       => $options,"
             .'];';
         $this->builder->__func('Config', $code, 'array');
 

@@ -14,6 +14,8 @@ namespace IronLions\WHMCS\UI\Client\Controller;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\StampInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -48,5 +50,16 @@ abstract class AbstractController
         }
 
         return new Response($twig->render($view.'.twig', $variables));
+    }
+
+    /**
+     * Dispatches the given message.
+     *
+     * @param object|Envelope  $message The message or the message pre-wrapped in an envelope
+     * @param StampInterface[] $stamps
+     */
+    protected function bus($message, array $stamps = []): Envelope
+    {
+        return $this->container->get('app.command_bus')->dispatch($message, $stamps);
     }
 }

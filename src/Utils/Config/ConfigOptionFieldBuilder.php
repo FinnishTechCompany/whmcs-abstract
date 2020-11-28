@@ -10,9 +10,9 @@
  *
  */
 
-namespace IronLions\WHMCS\Utils\Extension\Provision;
+namespace IronLions\WHMCS\Utils\Config;
 
-use IronLions\WHMCS\Utils\Extension\Field\FieldBuilder;
+use IronLions\WHMCS\Utils\Config\Field\FieldBuilder;
 
 final class ConfigOptionFieldBuilder extends FieldBuilder
 {
